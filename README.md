@@ -5,16 +5,14 @@ A python package for creating and taking quizzes.
 ## Summary
 ### Project Summary
 This python package allows users to create custom build quizzes.
-The package has three functions: `load_questions()`, `take_multiple_choice()` and `take_short_answer()`. 
-The `load_questions` function allow users to load in their own multiple-choice or short answer question sets,
-while the `take_multiple_choice` and `take_short_answer` functions allow users to take a multiple choice/short answer quiz respectively.
 Quiz scores and time used will be display at the end of the quiz.
 Users can have their quiz scores, incorrect questions and correct questions in a text file if prompted. 
 
 ### Package Functions
-load_questions()
-take_multiple_choice()
-take_short_answer()
+The package has three functions: `load_questions()`, `take_multiple_choice()` and `take_short_answer()`.  
+- `load_questions()` : allow users to load in their own multiple-choice or short answer question sets
+- `take_multiple_choice()` : allow users to take a multiple choice quiz
+- `take_short_answer()` : allow users to take a short answer quiz.
 
 ### Python Ecosystem Integration
 
