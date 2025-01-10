@@ -32,6 +32,18 @@ Project maintainers have the right and responsibility to remove, edit, or reject
 
 This Code of Conduct applies both within project spaces and in public spaces when an individual is representing the project or its community. Examples of representing a project or community include using an official project e-mail address, posting via an official social media account, or acting as an appointed representative at an online or offline event. Representation of a project may be further defined and clarified by project maintainers.
 
+## Communication Guidelines
+- Use clear and concise language in communications to avoid misunderstandings.
+- Be patient and considerate, understanding that contributors may be at different skill levels or time zones.
+- Avoid making assumptions; seek clarification when needed.
+
+## Reporting Issues
+If you encounter behavior that violates this Code of Conduct:
+
+- First, consider resolving the issue respectfully through direct communication.
+- If unresolved, report it to the project maintainers by any of these emails:  [hwong52@student.ubc.ca](mailto:hwong52@student.ubc.ca), [jessicayujiajia@gmail.com](jessicayujiajia@gmail.com),
+[schisom@student.ubc.ca](schisom@student.ubc.ca).
+
 ## Enforcement
 
 Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting the project team. The project team will review and investigate all complaints, and will respond in a way that it deems appropriate to the circumstances. The project team is obligated to maintain confidentiality with regard to the reporter of an incident. Further details of specific enforcement policies may be posted separately.
