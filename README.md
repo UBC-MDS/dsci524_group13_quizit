@@ -2,6 +2,10 @@
 
 A python package for creating and taking quizzes.
 
+## Contributors
+
+Mavis Wong, Shangjia Yu, Sopuruchi Chisom
+
 ## Installation
 
 ```bash
