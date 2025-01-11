@@ -6,7 +6,7 @@ A python package for creating and taking quizzes.
 ### Project Summary
 This python package allows users to create custom build quizzes.
 Quiz scores and time used will be display at the end of the quiz.
-Users can have their quiz scores, incorrect questions and correct questions in a text file if prompted. 
+Users can have their quiz scores, incorrect questions and correct questions in a text file if prompted.
 
 ### Package Functions
 The package has three functions: `load_questions()`, `take_multiple_choice()` and `take_short_answer()`.  
@@ -16,6 +16,8 @@ The package has three functions: `load_questions()`, `take_multiple_choice()` an
 
 ### Python Ecosystem Integration
 
+`dsci524_group13_quizit` is a fantastic tool for both educators and learners, providing a seamless way to create and take quizzes. Unlike other Python packages such as [`quizzer`](https://pypi.org/project/quizzer/) and [`QuizzingPackage`](https://pypi.org/project/QuizzingPackage/), this package stands out by supporting both multiple-choice and short answer formats. Additionally, it offers the unique feature of saving quiz results to a text file, making it an invaluable resource for tracking progress and performance. 
+Whether you're teaching a class or studying for an exam, `dsci524_group13_quizit` is designed to make the quiz experience as smooth and effective as possible.
 
 
 ## Installation
