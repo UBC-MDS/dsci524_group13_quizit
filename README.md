@@ -11,8 +11,10 @@ Quiz scores and time used will be displayed at the end of the quiz.
 Optionally, users can also have their quiz scores and incorrect and correct questions in a text file. 
 
 ### Package Functions
+
 The package has three functions: 
-- `load_questions()` : allow users to load in their own multiple-choice or short answer question sets 
+- `load_questions(questions: pd.DataFrame, input_file: str, question_type: QuestionType, has_header: bool = True)` : 
+  -  allow users to load in their own multiple-choice or short an
 - `take_multiple_choice(n, save_questions=False, save_score=False)`:
     - Allow users to take a multiple-choice quiz with optional result tracking.
 - `take_short_answer()` : allow users to take a short answer quiz.
