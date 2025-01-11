@@ -1,10 +1,33 @@
 class Quizit():
+     """
+    A class to manage and conduct custom quizzes with multiple-choice and short-answer questions.
+    
+    This class allows users to load multiple-choice and short-answer question sets, and take multiple-choice or short-answer quizzes. 
+    The quiz can save the user's score, and optionally log the answered questions and their correctness.
+    """
     def __init__(self):
+        """
+        Initializes a new instance of the Quizit class.
+    
+        Attributes:
+        -----------
+        mcq : list, optional
+            A collection of multiple-choice questions.
+    
+        shrtq : list, optional
+            A collection of short-answer questions.
+    
+        Example:
+        --------
+        quiz = Quizit()
+        """    
         self.mcq = None
         self.shrtq = None
         pass
+    
     def load_questions(self):
         pass
+
     def take_multiple_choice(self, n, save_questions=False, save_score=False):
         """
         Conducts a multiple-choice quiz and provides optional result tracking.
@@ -33,7 +56,7 @@ class Quizit():
             - False: No questions are saved.
 
         save_score : bool, optional (default=False)
-            If True, saves the final quiz score and the time taken to a file.
+            If True, save the final quiz score and the time taken to a file.
 
         Returns:
         --------
@@ -42,12 +65,7 @@ class Quizit():
 
         Example:
         --------
-        question = pd.DataFrame({
-            "Question": ["What is 1 + 1?"],
-            "A": [1], "B": [2], "C": [3], "D": [4], "Answer": [2], "Explanation": ["1 + 1 = 2"]
-        })
-        mc_quiz = Quizit(question, type="mcq")
-        mc_quiz.take_multiple_choice(1, save_questions="incorrect", save_score=True)
+        quiz.take_multiple_choice(10, save_questions="incorrect", save_score=True)
         """
         pass
 
