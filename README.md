@@ -9,9 +9,12 @@ Quiz scores and time used will be display at the end of the quiz.
 Users can have their quiz scores, incorrect questions and correct questions in a text file if prompted. 
 
 ### Package Functions
-The package has three functions: `load_questions()`, `take_multiple_choice()` and `take_short_answer()`.  
-- `load_questions()` : allow users to load in their own multiple-choice or short answer question sets
-- `take_multiple_choice()` : allow users to take a multiple choice quiz
+The package has three functions: 
+- `load_questions()` : allow users to load in their own multiple-choice or short answer question sets 
+<br>
+- `take_multiple_choice(n, save_questions=False, save_score=False)`: <br>
+    - Allow users to take a multiple choice quiz with optional result tracking. <br>
+    - Users can select the number of question to be randomly selected from the question bank. <br>
 - `take_short_answer()` : allow users to take a short answer quiz.
 
 ### Python Ecosystem Integration
