@@ -4,14 +4,19 @@ A python package for creating and taking quizzes.
 
 ## Summary
 ### Project Summary
-This python package allows users to create custom build quizzes.
-Quiz scores and time used will be display at the end of the quiz.
-Users can have their quiz scores, incorrect questions and correct questions in a text file if prompted. 
+This Python package is designed to help users to create custom build quizzes.
+The package allows users to load multiple-choice and/or short-answer question sets.
+It will then randomly select a user-defined number of questions from the question sets and generate a quiz.
+Quiz scores and time used will be displayed at the end of the quiz.
+Optionally, users can also have their quiz scores and incorrect and correct questions in a text file. 
 
 ### Package Functions
-The package has three functions: `load_questions()`, `take_multiple_choice()` and `take_short_answer()`.  
-- `load_questions(questions: pd.DataFrame, input_file: str, question_type: QuestionType, has_header: bool = True)` : allow users to load in their own multiple-choice or short answer question sets
-- `take_multiple_choice()` : allow users to take a multiple choice quiz
+
+The package has three functions: 
+- `load_questions(questions: pd.DataFrame, input_file: str, question_type: QuestionType, has_header: bool = True)` : 
+  -  allow users to load in their own multiple-choice or short an
+- `take_multiple_choice(n, save_questions=False, save_score=False)`:
+    - Allow users to take a multiple-choice quiz with optional result tracking.
 - `take_short_answer()` : allow users to take a short answer quiz.
 
 ### Python Ecosystem Integration
