@@ -10,7 +10,7 @@ Users can have their quiz scores, incorrect questions and correct questions in a
 
 ### Package Functions
 The package has three functions: `load_questions()`, `take_multiple_choice()` and `take_short_answer()`.  
-- `load_questions()` : allow users to load in their own multiple-choice or short answer question sets
+- `load_questions(questions: pd.DataFrame, input_file: str, question_type: QuestionType, has_header: bool = True)` : allow users to load in their own multiple-choice or short answer question sets
 - `take_multiple_choice()` : allow users to take a multiple choice quiz
 - `take_short_answer()` : allow users to take a short answer quiz.
 
