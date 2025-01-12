@@ -11,16 +11,16 @@ Quiz scores and time used will be displayed at the end of the quiz.
 Optionally, users can also have their quiz scores and incorrect and correct questions in a text file. 
 
 ### Package Functions
-
 The package has three functions: 
-- `load_questions(questions: pd.DataFrame, input_file: str, question_type: QuestionType, has_header: bool = True)` : 
-  -  allow users to load in their own multiple-choice or short an
+- `load_questions()` : allow users to load in their own multiple-choice or short answer question sets 
 - `take_multiple_choice(n, save_questions=False, save_score=False)`:
     - Allow users to take a multiple-choice quiz with optional result tracking.
-- `take_short_answer()` : allow users to take a short answer quiz.
+- `take_short_answer(n, save_questions=False, save_score=False)` : allow users to take a short answer quiz with optional result tracking.
 
 ### Python Ecosystem Integration
 
+`dsci524_group13_quizit` is a fantastic tool for both educators and learners, providing a seamless way to create and take quizzes. Unlike other Python packages such as [`quizzer`](https://pypi.org/project/quizzer/) and [`QuizzingPackage`](https://pypi.org/project/QuizzingPackage/), this package stands out by supporting both multiple-choice and short answer formats. Additionally, it offers the unique feature of saving quiz results to a text file, making it an invaluable resource for tracking progress and performance. 
+Whether you're teaching a class or studying for an exam, `dsci524_group13_quizit` is designed to make the quiz experience as smooth and effective as possible.
 
 
 ## Installation
