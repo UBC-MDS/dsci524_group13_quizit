@@ -15,7 +15,7 @@ The package has three functions:
 - `load_questions()` : allow users to load in their own multiple-choice or short answer question sets 
 - `take_multiple_choice(n, save_questions=False, save_score=False)`:
     - Allow users to take a multiple-choice quiz with optional result tracking.
-- `take_short_answer()` : allow users to take a short answer quiz.
+- `take_short_answer(n, save_questions=False, save_score=False)` : allow users to take a short answer quiz with optional result tracking.
 
 ### Python Ecosystem Integration
 
