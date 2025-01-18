@@ -98,7 +98,9 @@ def test_edge_case_empty_questions():
         quizit.take_short_answer(n=1)
 
 
-def test_edge_case_invalid_answer_format(quizit, capsys):
+def test_edge_case_invalid_answer_format(quizit, capsys, monkeypatch):
+    monkeypatch.setattr('builtins.input', lambda _: 'apple pie')  
+    
     with capsys.disabled():
         quizit.shrtq = pd.DataFrame({
             'question': ['What is your favorite fruit?'],
@@ -106,6 +108,7 @@ def test_edge_case_invalid_answer_format(quizit, capsys):
         })
         with pytest.raises(ValueError):
             quizit.take_short_answer(n=1)
+
 
 
 def test_take_short_answer_with_edge_case_empty_question():
