@@ -8,15 +8,15 @@ class Quizit():
     def __init__(self):
         """
         Initializes a new instance of the Quizit class.
-    
+
         Attributes:
         -----------
         mcq : list, optional
             A collection of multiple-choice questions.
-    
+
         shrtq : list, optional
             A collection of short-answer questions.
-    
+
         Example:
         --------
         quiz = Quizit()

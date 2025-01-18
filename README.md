@@ -13,7 +13,7 @@ Optionally, users can also have their quiz scores and incorrect and correct ques
 ### Package Functions
 The package has three functions: 
 - `load_questions()` : allow users to load in their own multiple-choice or short answer question sets 
-- `take_multiple_choice(n, save_questions=False, save_score=False)`:
+- `take_multiple_choice(n, save_questions=False, save_score=False, file_path="")`:
     - Allow users to take a multiple-choice quiz with optional result tracking.
 - `take_short_answer(n, save_questions=False, save_score=False)` : allow users to take a short answer quiz with optional result tracking.
 
