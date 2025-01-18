@@ -4,19 +4,19 @@ import os
 import pandas as pd
 import numpy as np
 from io import StringIO
-
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
+from dsci524_group13_quizit.take_multiple_choice import Quizit
 from dsci524_group13_quizit.utils import (
     select_questions, print_question, prompt_input, input_check, 
     mcq_score, score_log, question_log, QuizResult
 )
 
-from dsci524_group13_quizit.take_multiple_choice import Quizit
 
-# Sample DataFrame fixture for testing
+
 @pytest.fixture
 def sample_mcq():
+    """Sample DataFrame fixture for testing"""
     return pd.DataFrame({
     "questions": ["Question 1?", "Question 2?" , "Question 3?", "Question 4?", "Question 5?"], 
     "options": [["option1", "option2", "option3", "option4"], ["option1", "option2", "option3", "option4", "option5"], ["option1", "option2"], ["option1", "option2", "option3", "option4"], ["option1", "option2", "option3"]],
@@ -26,13 +26,18 @@ def sample_mcq():
 
 
 def test_select_questions(sample_mcq):
-    # Test if questions are selected without replacement and have correct length.
+    """
+    1. Test if questions are selected without replacement and have correct length.
+    2. Test if function returns all questions if n > number of questions available.
+    """
+    # Test 1
     n, quiz = select_questions(sample_mcq, 3)
     assert n == 3
     assert quiz.shape == (3, 4)
     assert isinstance(quiz, pd.DataFrame)
     assert any(quiz.duplicated(subset=["questions", "explanations"])) == False
 
+    # Test 2
     n, quiz = select_questions(sample_mcq, 10)
     assert n == 5
     assert quiz.shape == (5, 4)
@@ -40,12 +45,17 @@ def test_select_questions(sample_mcq):
     assert any(quiz.duplicated(subset=["questions", "explanations"])) == False
 
 def test_prompt_input(monkeypatch):
+    """Test if function prompts users for input and return it"""
     mock_response = StringIO("A")
     monkeypatch.setattr('sys.stdin', mock_response)
     assert prompt_input() == "A"
 
 
 def test_print_question(sample_mcq):
+    """
+    1. Test if function returns correct list and dictionary of print_q=True
+    2. Test if function returns a string containing the question and its options if print_q = False
+    """
     question = sample_mcq.iloc[0]
     n_options, options_dict = print_question(question, iter=0, print_q=True)
     assert n_options == ["A", "B", "C", "D"]
@@ -56,6 +66,7 @@ def test_print_question(sample_mcq):
  
 
 def test_input_check():
+    """Test the function for correct validation of user input and handling of invalid cases """
     n_options = ["A", "B", "C"]
     valid_input = ["A", ", c , A , b, "]
     # Valid input
