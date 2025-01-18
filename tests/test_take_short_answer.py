@@ -3,14 +3,19 @@ import os
 import pandas as pd
 from io import StringIO
 
-from dsci524_group13_quizit.take_short_answer import Quizit,QuizResult
+from dsci524_group13_quizit.take_short_answer import Quizit, QuizResult
+
+@pytest.fixture
+def quizit():
+    quiz = Quizit()
+    quiz.shrtq = pd.DataFrame({
+        'question': ['What is Python?'],
+        'answers': ['python']
+    })
+    return quiz
 
 def test_take_short_answer_valid(quizit, capsys):
     with capsys.disabled():
-        quizit.shrtq = pd.DataFrame({
-            'question': ['What is Python?'],
-            'answers': ['python']
-        })
         result = quizit.take_short_answer(n=1)
     captured = capsys.readouterr()
 
@@ -109,3 +114,4 @@ def test_take_short_answer_with_edge_case_empty_question():
 
     with pytest.raises(ValueError):
         quizit.take_short_answer(n=1)
+
