@@ -115,9 +115,9 @@ def load_questions_from_file(input_file: str, question_type: QuestionType, has_h
     
     try:
         header = 0 if has_header else None
-        questions_df = pd.read_csv(input_file, header=header)
-        
-        if questions_df.empty:
+        try:
+            questions_df = pd.read_csv(input_file, header=header)
+        except ValueError:
             raise ValueError("The input file is empty.")
         
         return _validate_question_format(question_type=question_type, has_header=has_header, questions=questions_df, delimeter=delimeter)
