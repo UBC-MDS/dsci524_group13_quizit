@@ -29,7 +29,6 @@ class Quizit():
         pass
 
     def take_multiple_choice():
-    
         pass
 
     def take_short_answer(self):
