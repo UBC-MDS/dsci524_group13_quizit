@@ -1,4 +1,30 @@
-def take_short_answer(self, n, save_questions=False, save_score=False) -> dict:
+class Quizit():
+    """
+    A class to manage and conduct custom quizzes with multiple-choice and short-answer questions.
+    
+    This class allows users to load multiple-choice and short-answer question sets, and take multiple-choice or short-answer quizzes. 
+    The quiz can save the user's score, and optionally log the answered questions and their correctness.
+    """
+    def __init__(self):
+        """
+        Initializes a new instance of the Quizit class.
+
+        Attributes:
+        -----------
+        mcq : list, optional
+            A collection of multiple-choice questions.
+
+        shrtq : list, optional
+            A collection of short-answer questions.
+
+        Example:
+        --------
+        quiz = Quizit()
+        """    
+        self.mcq = None
+        self.shrtq = None
+
+    def take_short_answer(self, n, save_questions=False, save_score=False) -> dict:
         """
         Allows the user to take a short-answer quiz and evaluates their score.
 
@@ -28,20 +54,20 @@ def take_short_answer(self, n, save_questions=False, save_score=False) -> dict:
         if n > len(self.shrtq):
             raise ValueError(f"Not enough questions available. Only {len(self.shrtq)} questions loaded.")
         
-        quiz = np.random.choice(self.shrtq, n, replace=False)
-        question = quiz["questions"]
+        quiz = self.shrtq.sample(n)
+        question = quiz["question"]
         answers = quiz["answers"]
         quiz["response"] = ""
-        
+
         score = []
         correct_answers = []
         incorrect_answers = []
 
         start = time.time()
         for i in range(len(question)):
-            print(f"Question {i+1}: {question[i]}")
+            print(f"Question {i+1}: {question.iloc[i]}")
             
-            correct_answer = answers[i].lower()
+            correct_answer = answers.iloc[i].lower()
             words = correct_answer.split()
             if len(words) == 1:
                 print("Hint: Your answer must be one word.")
@@ -57,14 +83,14 @@ def take_short_answer(self, n, save_questions=False, save_score=False) -> dict:
             if user_input == correct_answer:
                 score.append(1)
                 quiz.loc[[i], "response"] = user_input
-                correct_answers.append(question[i])
+                correct_answers.append(question.iloc[i])
             else:
                 score.append(0)
                 quiz.loc[[i], "response"] = user_input
-                incorrect_answers.append(question[i])
+                incorrect_answers.append(question.iloc[i])
 
         time_used = time.time() - start
-        score_percent = round(sum(score)/n*100, 2)
+        score_percent = round(sum(score) / n * 100, 2)
         score_rec = {"date": time.asctime(), "pct_score": score_percent, "time_used": round(time_used, 2)}
 
         print("===============================")
