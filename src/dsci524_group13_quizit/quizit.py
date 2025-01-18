@@ -1,5 +1,5 @@
 class Quizit():
-     """
+    """
     A class to manage and conduct custom quizzes with multiple-choice and short-answer questions.
     
     This class allows users to load multiple-choice and short-answer question sets, and take multiple-choice or short-answer quizzes. 
@@ -8,15 +8,15 @@ class Quizit():
     def __init__(self):
         """
         Initializes a new instance of the Quizit class.
-    
+
         Attributes:
         -----------
         mcq : list, optional
             A collection of multiple-choice questions.
-    
+
         shrtq : list, optional
             A collection of short-answer questions.
-    
+
         Example:
         --------
         quiz = Quizit()
@@ -29,7 +29,7 @@ class Quizit():
         pass
 
     def take_multiple_choice():
-        """
+    
         pass
 
     def take_short_answer(self):
