@@ -5,6 +5,7 @@ import string as str
 import re as re
 import time
 import os
+
 def select_questions(mcq, n):
     # Shuffle and Select Questions
     try:
@@ -14,9 +15,9 @@ def select_questions(mcq, n):
     
     return quiz.shape[0], quiz
 
-def prompt_input(input_func=input):
+def prompt_input():
     # Prompt users for input
-    return input_func("Enter Answer:\n")
+    return input("Enter Answer: ")
 
 def print_question(question, iter, print_q=True):   
     # Print MCQ questions the their options
@@ -64,24 +65,25 @@ def mcq_score(options_dict, question_df, user_input):
     score = sum(right_match + wrong_absent) / len(options_dict)
     return round(score, 2)
 
-def score_log(final_score, time_used, save_score=True):
+def score_log(final_score, time_used, save_score=True, file_path=""):
     if save_score == False:
         return
 
     score_rec = f"{time.asctime()}  | {round(final_score*100)}%      | {time_used}"
     
-    if not os.path.exists("score.txt"):
+    file = os.path.join(file_path, "score.txt")
+    if not os.path.exists(file):
         mode = "x"
     else: 
         mode = "a"
 
-    with open("score.txt", mode) as f:
+    with open(file, mode) as f:
         if mode == "x":
             f.write("Date                      | Score    |Time Used (s)\n")
         f.write(f"{score_rec}\n")
     return 
 
-def question_log(type, quiz):
+def question_log(type, quiz, file_path=""):
     if type == "all":
         pass
     elif type == "incorrect":
@@ -91,7 +93,7 @@ def question_log(type, quiz):
     else:
         return quiz
 
-    file = type + ".txt"
+    file = os.path.join(file_path, type + ".txt")
     with open(file, "a") as f:
         for i in range(quiz.shape[0]):
             f.write(f"Question \n")
