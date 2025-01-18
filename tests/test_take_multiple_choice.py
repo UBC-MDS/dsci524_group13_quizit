@@ -27,8 +27,8 @@ def sample_mcq():
 
 def test_select_questions(sample_mcq):
     """
-    1. Test if questions are selected without replacement and have correct length.
-    2. Test if function returns all questions if n > number of questions available.
+    1. Test if select_question fucntion selectes questions without replacement and returns a DataFrame with correct length.
+    2. Test if select_question function returns all questions if n > number of questions available.
     """
     # Test 1
     n, quiz = select_questions(sample_mcq, 3)
@@ -45,7 +45,7 @@ def test_select_questions(sample_mcq):
     assert any(quiz.duplicated(subset=["questions", "explanations"])) == False
 
 def test_prompt_input(monkeypatch):
-    """Test if function prompts users for input and return it"""
+    """Test if prompt_input function prompts users for input and return it"""
     mock_response = StringIO("A")
     monkeypatch.setattr('sys.stdin', mock_response)
     assert prompt_input() == "A"
@@ -53,8 +53,8 @@ def test_prompt_input(monkeypatch):
 
 def test_print_question(sample_mcq):
     """
-    1. Test if function returns correct list and dictionary of print_q=True
-    2. Test if function returns a string containing the question and its options if print_q = False
+    1. Test if the print_question function returns correct list and dictionary of print_q=True
+    2. Test if the print_question function returns a string containing the question and its options if print_q = False
     """
     question = sample_mcq.iloc[0]
     n_options, options_dict = print_question(question, iter=0, print_q=True)
@@ -66,10 +66,11 @@ def test_print_question(sample_mcq):
  
 
 def test_input_check():
-    """Test the function for correct validation of user input and handling of invalid cases """
+    """Test the input_check function for correct validation of user input and handling of invalid cases """
     n_options = ["A", "B", "C"]
     valid_input = ["A", ", c , A , b, "]
-    # Valid input
+    
+    # Validate Valid input
     user_input, valid, message = input_check(valid_input[0], n_options, count=1)
     assert valid is True
     assert user_input == ["A"]
@@ -80,7 +81,7 @@ def test_input_check():
     assert user_input == ["C", "A", "B"]
     assert message == f"Your Answer: {['C', 'A', 'B']}"
     
-    # Invalid input
+    # Handling Invalid input
     invalid_input = ["1, a, b, #", "", "D, "]
 
     user_input, valid, message = input_check(invalid_input[0], n_options, count=1)
@@ -99,6 +100,7 @@ def test_input_check():
     assert "Maximum attempts reached" in message
 
 def test_mcq_score(sample_mcq):
+    """Test if mcq_score function returns correct score based on user's response"""
     options_dict = {"A": "option1", "B": "option2", "C": "option3", "D": "option4", "E": "option5"}
     question = sample_mcq.iloc[1]
 
@@ -110,22 +112,22 @@ def test_mcq_score(sample_mcq):
     score = mcq_score(options_dict, question, ["A", "B", "D"])
     assert score == 0.60
 
-    # Incorrect answer
     score = mcq_score(options_dict, question, ["D"])
     assert score == 0.2
 
+    # Incorrect answer
     score = mcq_score(options_dict, question, ["D", "E"])
     assert score == 0.0
 
 
 def test_take_multiple_choice_no_questions():
-    """Test that take_multiple_choice raises an error if no questions are loaded."""
+    """Test that the take_multiple_choice method raises an error if no questions are loaded."""
     quiz = Quizit()
     with pytest.raises(ValueError, match="No multiple-choice questions loaded."):
         quiz.take_multiple_choice(2)
 
 def test_take_multiple_choice_invalid_arguments(sample_mcq):
-    """Test that take_multiple_choice raises errors for invalid arguments."""
+    """Test if the take_multiple_choice method raises errors for invalid arguments."""
     quiz = Quizit()
     quiz.mcq = sample_mcq
 
@@ -148,6 +150,7 @@ def test_take_multiple_choice_invalid_arguments(sample_mcq):
         quiz.take_multiple_choice(1)
 
 def test_score_log():
+    """Tests the score_log function for correct file creation, logging, and handling of save options."""
     path = os.path.join("tests", "score.txt")
     if os.path.exists(path):
         os.remove(path)
@@ -171,15 +174,19 @@ def test_score_log():
     
 
 def test_question_log(sample_mcq):
+    """Tests the question_log function for correct filtering and logging of questions."""
+    # Create Test Data
     sample_mcq["response"] = [["A"], ["B", "E"], ["B"], ["A", "B", "D"], ["B", "C"]]
     sample_mcq["score"] = [1.0, 0.6, 0.0, 0.75, 1.0]
     files = ["all.txt", "incorrect.txt", "correct.txt"]
 
+    # Remove existing test files
     for f in files:
         path = os.path.join("tests", f)
         if os.path.exists(path):
             os.remove(path)
     
+    # Test for save_question="all"
     path = os.path.join("tests", "all.txt")
     quiz = question_log(False, sample_mcq, file_path="tests")
     assert quiz.shape == (5, 6)
@@ -187,6 +194,7 @@ def test_question_log(sample_mcq):
 
     quiz = question_log("all", sample_mcq.iloc[0:2], file_path="tests")
     assert quiz.shape == (2, 6)
+
     quiz = question_log("all", sample_mcq.iloc[[2]], file_path="tests")
     assert os.path.exists(path)
     with open(path, "r") as f:
@@ -198,6 +206,7 @@ def test_question_log(sample_mcq):
     assert "Correct Answer:" in content
     assert "Explanations:" in content
 
+    # Test for save_question="incorrect"
     path = os.path.join("tests", "incorrect.txt")
     quiz = question_log("incorrect", sample_mcq.iloc[[0]], file_path="tests")
     assert os.path.exists(path)
@@ -206,6 +215,7 @@ def test_question_log(sample_mcq):
     
     quiz = question_log("incorrect", sample_mcq.iloc[0:2], file_path="tests")
     assert quiz.shape == (1, 6)
+
     quiz = question_log("incorrect", sample_mcq.iloc[3:5], file_path="tests")
     with open(path, "r") as f:
         content = f.read()
@@ -214,6 +224,7 @@ def test_question_log(sample_mcq):
     assert "Question 4?" in content
     assert "Question 5?" not in content
 
+    # Test for save_question="correct"
     path = os.path.join("tests", "correct.txt")
     quiz = question_log("correct", sample_mcq.iloc[[1]], file_path="tests")
     assert os.path.exists(path)
@@ -222,6 +233,7 @@ def test_question_log(sample_mcq):
 
     quiz = question_log("correct", sample_mcq.iloc[0:2], file_path="tests")
     assert quiz.shape == (1, 6)
+
     quiz = question_log("correct", sample_mcq.iloc[3:5], file_path="tests")
     with open(path, "r") as f:
         content = f.read()
@@ -230,6 +242,7 @@ def test_question_log(sample_mcq):
     assert "Question 4?" not in content
     assert "Question 5?" in content
 
+    # Clean up test files
     for f in files:
         path = os.path.join("tests", f)
         if os.path.exists(path):
@@ -237,6 +250,7 @@ def test_question_log(sample_mcq):
 
 
 def test_quiz_result_class(sample_mcq):
+    """Tests the QuizResult class for correct initialization and attribute storage."""
     sample_mcq["response"] = [["A"], ["B", "E"], ["B"], ["A", "B", "D"], ["B", "C"]]
     sample_mcq["score"] = [1.0, 0.6, 0.0, 0.75, 1.0]
     result = QuizResult(time_used=15.3, score=0.85, question_summary=sample_mcq)
@@ -245,9 +259,10 @@ def test_quiz_result_class(sample_mcq):
     assert result.question_summary.shape == sample_mcq.shape
 
 def test_take_multiple_choice_quiz(sample_mcq, monkeypatch):
-    """Test the main quiz functionality."""
+    """Tests the take_multiple_choice method for functionality, result generation, and file logging."""
     files = ["score.txt", "all.txt", "incorrect.txt", "correct.txt"]
 
+    # Remove existing test files
     for f in files:
         path = os.path.join("tests", f)
         if os.path.exists(path):
@@ -260,18 +275,16 @@ def test_take_multiple_choice_quiz(sample_mcq, monkeypatch):
     monkeypatch.setattr('sys.stdin', mock_response)
     result = quiz.take_multiple_choice(3, save_questions="all", save_score=True, file_path="tests")
 
-    # Assertions
     assert isinstance(result, QuizResult)
     assert result.time_used >= 0
     assert 0 <= result.score <= 1
     assert result.question_summary is not None
-
-    # Check if logs were created
     assert os.path.exists(os.path.join("tests", "score.txt"))
     assert os.path.exists(os.path.join("tests", "all.txt"))
     assert not os.path.exists(os.path.join("tests", "correct.txt"))
     assert not os.path.exists(os.path.join("tests", "incorrect.txt"))
 
+    # Clean up created test files
     for f in files:
         path = os.path.join("tests", f)
         if os.path.exists(path):
