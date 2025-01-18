@@ -95,8 +95,12 @@ class Quizit():
         (mcq['options'].map(len) >= mcq['answers'].map(len))
         ]
 
-        if mcq is None:
-            raise ValueError("No multiple-choice questions loaded.")
+        if mcq.shape[0] == 0:
+            raise ValueError(
+        "No valid multiple-choice questions are available. Ensure that the data has no missing values, "
+        "'answers' and 'options' columns contains non-empty list, and that the number of options is greater than "
+        "or equal to the number of answers."
+        )
 
         # Initialise Quiz
         n, quiz = select_questions(self.mcq, max(n, 1))

@@ -1,1 +1,1 @@
-from dsci524_group13_quizit import dsci524_group13_quizit
+from dsci524_group13_quizit import *

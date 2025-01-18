@@ -4,6 +4,7 @@ import os
 import pandas as pd
 import numpy as np
 from io import StringIO
+
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from dsci524_group13_quizit.utils import (
@@ -129,6 +130,11 @@ def test_take_multiple_choice_invalid_arguments(sample_mcq):
     with pytest.raises(TypeError, match="Invalid value for 'n'"):
         quiz.take_multiple_choice("two")
         quiz.take_multiple_choice(-1)
+    
+    sample_mcq["options"] = [[], [], [], [], []]
+    quiz.mcq = sample_mcq
+    with pytest.raises(ValueError, match="No valid multiple-choice questions are available"):
+        quiz.take_multiple_choice(1)
 
 def test_score_log():
     path = os.path.join("tests", "score.txt")
