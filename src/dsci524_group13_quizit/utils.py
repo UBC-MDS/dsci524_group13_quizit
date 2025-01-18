@@ -1,0 +1,111 @@
+
+import numpy as np
+import pandas as pd
+import string as str
+import re as re
+import time
+import os
+def select_questions(mcq, n):
+    # Shuffle and Select Questions
+    try:
+        quiz = mcq.sample(n, replace=False, ignore_index=True)
+    except ValueError:
+        quiz = mcq.sample(mcq.shape[0], replace=False, ignore_index=True)
+    
+    return quiz.shape[0], quiz
+
+def prompt_input(input_func=input):
+    # Prompt users for input
+    return input_func("Enter Answer:\n")
+
+def print_question(question, iter, print_q=True):   
+    # Print MCQ questions the their options
+    options_dict = {}
+    options = question["options"]
+    n_options = list(str.ascii_uppercase[0:len(options)])
+
+    q_str = f"{question['questions']}\n"
+
+    for i in range(len(options)):
+        q_str += f"{n_options[i]} : {options[i]}\n"
+        options_dict[n_options[i]] = options[i]
+    
+    if print_q:
+        print("=" * 30 + f"\nQuestion {iter+1}:\n" + q_str)
+        return (n_options, options_dict)
+    else:
+        return q_str
+
+
+def input_check(user_input, n_options, count):
+    clean_user_input = user_input.replace(" ", "").upper().strip(",").split(",")
+    if all(ans in n_options for ans in clean_user_input):
+        message =  f"Your Answer: {clean_user_input}"
+        return (clean_user_input, True, message)
+    else:
+        if count < 3:
+            message = f"Your Answer: {user_input}\
+                \nInvalid input. Please select a valid option from the given choices."
+            return (user_input, False, message)
+        else:
+            message = f"Your Answer: {user_input}\
+                \nInvalid input, Maximum attempts reached, Proceed to next question.\
+                \n {'=' * 30}"
+            return ("", True, message)
+
+def mcq_score(options_dict, question_df, user_input):
+    if user_input == [""]:
+        return 0.0
+    answers = question_df["answers"]
+    right = [key for key, val in options_dict.items() if val in answers]
+    wrong = [key for key, val in options_dict.items() if val not in answers]
+    right_match = [rt in user_input for rt in right]
+    wrong_absent = [wrg not in user_input for wrg in wrong]
+    score = sum(right_match + wrong_absent) / len(options_dict)
+    return round(score, 2)
+
+def score_log(final_score, time_used, save_score=True):
+    if save_score == False:
+        return
+
+    score_rec = f"{time.asctime()}  | {round(final_score*100)}%      | {time_used}"
+    
+    if not os.path.exists("score.txt"):
+        mode = "x"
+    else: 
+        mode = "a"
+
+    with open("score.txt", mode) as f:
+        if mode == "x":
+            f.write("Date                      | Score    |Time Used (s)\n")
+        f.write(f"{score_rec}\n")
+    return 
+
+def question_log(type, quiz):
+    if type == "all":
+        pass
+    elif type == "incorrect":
+        quiz = quiz.loc[quiz["score"]!=1]
+    elif type == "correct":
+        quiz = quiz.loc[quiz["score"]==1]
+    else:
+        return quiz
+
+    file = type + ".txt"
+    with open(file, "a") as f:
+        for i in range(quiz.shape[0]):
+            f.write(f"Question \n")
+            f.write(print_question(quiz.iloc[i], i, print_q=False))
+            f.write(f"Your Answer: {quiz.iloc[i]['response']}\n")
+            f.write(f"Correct Answer: {quiz.iloc[i]['answers']}\n")
+            f.write(f"Explanations: {quiz.iloc[i]['explanations']}\n")
+            f.write("====================================\n")
+    return quiz
+
+class QuizResult:
+    def __init__(self, time_used, score, question_summary):
+        self.time_used = time_used
+        self.score = score
+        self.question_summary = question_summary
+        pass
+        
