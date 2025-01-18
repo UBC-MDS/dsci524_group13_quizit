@@ -1,7 +1,7 @@
-import numpy as np
 import pandas as pd
 import string as str
 import time
+from utils import *
 class Quizit():
     """
     A class to manage and conduct custom quizzes with multiple-choice and short-answer questions.
@@ -28,6 +28,7 @@ class Quizit():
         self.mcq = None
         self.shrtq = None
         pass
+
     def take_multiple_choice(self, n, save_questions=False, save_score=False):
         """
         Conducts a multiple-choice quiz and provides optional result tracking.
@@ -67,64 +68,64 @@ class Quizit():
         --------
         quiz.take_multiple_choice(10, save_questions="incorrect", save_score=True)
         """
-        if self.mcq == None:
-            raise ValueError("No multiple choice questions loaded.")
-        try:
-            quiz = np.random.choice(self.mcq, n, replace=False)
-        except:
-            quiz = self.mcq
+        # Handle Exceptions
+        if self.mcq is None:
+            raise ValueError("No multiple-choice questions loaded.")
+
+        if save_questions not in ["all", "correct", "incorrect", False]:
+            raise TypeError("Invalid value for 'save_questions'. \nExpected one of: 'all', 'correct', 'incorrect', or False.")
+
+        if save_score not in [True, False]:
+            raise TypeError("Invalid value for 'save_score'. \nExpected boolean: True or False.")
+
+        if not isinstance(n, int):
+            raise TypeError("Invalid value for 'n'. Expected positive integer.")
         
+        mcq = self.mcq
+        mcq = mcq.dropna()
+        mcq = mcq[
+        (mcq['answers'].map(len) > 0) &
+        (mcq['options'].map(len) > 0) &
+        (mcq['options'].map(len) >= mcq['answers'].map(len))
+        ]
 
-        question = quiz["questions"]
-        options = quiz["options"]
-        answers = quiz["answers"]
-        explanations = quiz["explanations"]
-        quiz["response"] = ""
-        score = []
+        # Initialise Quiz
+        n, quiz = select_questions(self.mcq, max(n, 1))
+        final_score = []
+        
+        print(f"This quiz contains {n} questions.\
+            \nTo answer, type the corresponding letter of your choice (e.g. A). \
+            \nIf there are multiple answers, separate your choices with commas (e.g. A, B).")
 
-        start = time.time()
-        for i in range(questions.shape[0]):
-            options_dict = {}
-            print(questions[i])
-            n_options = list(str.ascii_uppercase[0:len(options[i])])
-            for j in range(len(n_options)):
-                print(n_options[j], ":", options[i][j])
-                options_dict[n_options[j]] = options[i][j]     
+        # Quiz
+        start_time = time.time()
+        for i in range(n):
+            n_options, options_dict = print_question(quiz.iloc[i], i)
+            
+            # Validate user input
+            valid = False
             count = 0
-            user_input = input("Enter Answer:\n")
-            user_input = user_input.upper().replace(" ", "").split(",")
-            right = [key for key, val in options_dict.items() if val in answers[i]]
-            wrong = [key for key, val in options_dict.items() if val not in answers[i]]
-            while count <= 2:
-                if all(ele in n_options for ele in user_input):
-                    print("Your Answer:", user_input)
-                    break
-                elif count < 2:
-                    print("Your Answer:", user_input)
-                    print("Invalid answer, choose from the options")
-                    count += 1
-                    user_input = input()
-                    user_input = user_input.upper().replace(" ", "").split(",")
-                elif count == 2:
-                    print("Your Answer:", user_input)
-                    print("Invalid answer, Maximum attempts reached, Proceed to next question.")
-                    user_input = [""] 
-                    break
-            quiz.loc[[i],["response"]] = user_input
-            if user_input != [""]:
-                q_score = round((sum([rt in user_input for rt in right]) + sum([wrg not in user_input for wrg in wrong]))/len(n_options),2)
-            else:
-                q_score = 0
-            score.append(q_score)
-            if q_score != 1:
-                wrong_q = pd.concat([wrong_q, quiz.iloc[[i],:]])
-            else:
-                correct_q = pd.concat([right_q, quiz.iloc[[i],:]])
-        time_used = time.time() - start
-        score_rec = {"date": time.asctime(), "pct_score": round(sum(score)/questions.shape[0],2), "time_used": round(time_used, 2)}
-        print("===============================")
-        print("Quiz Results")
-        print(f"Score: {sum(score)}/{questions.shape[0]} ({round(sum(score)/questions.shape[0]*100,2)}%)" )
-        print("time used:", round(time_used, 2), "seconds")
-        print(score_rec)
-        pass
+            while not valid:
+                count += 1
+                user_input = prompt_input()
+                user_input, valid, message = input_check(user_input, n_options, count)
+                print(message)
+            
+            quiz.loc[i, "response"] = user_input
+            score = mcq_score(options_dict, quiz.iloc[i], user_input)
+            final_score.append(score)
+            quiz.loc[i, "score"] = score
+
+        # Saving and Displaying Quiz Results
+        time_used = round((time.time() - start_time), 2)
+        pct_score = round(sum(final_score)/n, 2)
+        score_log(round(pct_score, 2), time_used, save_score)
+        quiz = question_log(save_questions, quiz)
+        result = QuizResult(time_used=time_used, score=pct_score, question_summary=quiz)
+        
+        print("="*30, "\nQuiz Results")
+        print(f"Score: {sum(final_score)}/{n} ({pct_score*100}%)" )
+        print("Time used:", round(time_used, 2), "seconds")     
+
+        return result
+
