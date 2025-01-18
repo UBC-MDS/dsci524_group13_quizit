@@ -47,7 +47,7 @@ class Quizit():
         - If `save_score` is True, the final score and time spent are saved to a file.
         - If `save_questions` is set to "all", "incorrect", or "correct", it saves the 
         corresponding questions (with their options, user answers, correct answers, and explanations) 
-        to a log file.
+        to a log file. If `file_path` is not specified, log files will be saved to your current working directory.
 
         Parameters:
         -----------
@@ -64,17 +64,34 @@ class Quizit():
 
         save_score : bool, optional (default=False)
             If True, save the final quiz score and the time taken to a file.
+        
+        file_path : str, optional (default="")
+            Allow users to specify the location where the quiz score and question log are stored.
 
         Returns:
         --------
-        results : str
-            A summary of the quiz, including the final score and the time used to complete the quiz.
+        results : QuizResult
+            An instance of the `QuizResult` class, which contains:
+            - `time_used`: The time (in seconds) taken to complete the quiz.
+            - `score`: The final quiz percentage score.
+            - `question_summary`: A DataFrame with details about all answered questions, including user responses, correct answers, and scores.
+
+        Raises:
+        -------
+        ValueError
+            If no multiple-choice questions are loaded in the `Quizit` class instance (`self.mcq` == `None`).
+            If there are no valid multiple-choice questions available.
+        
+        TypeError
+            If the `save_questions` parameter is not one of: 'all', 'correct', 'incorrect', or False.
+            If the `save_score` parameter is not a boolean (True or False).
+            If the `n` parameter is not an integer.
 
         Example:
         --------
         quiz.take_multiple_choice(10, save_questions="incorrect", save_score=True)
         """
-        # Handle Exceptions
+        # Exception Handling - Invalid Argument Input
         if self.mcq is None:
             raise ValueError("No multiple-choice questions loaded.")
 
@@ -87,6 +104,7 @@ class Quizit():
         if not isinstance(n, int):
             raise TypeError("Invalid value for 'n'. Expected positive integer.")
         
+        # Exception Handling - Invalid Question Dataset
         mcq = self.mcq
         mcq = mcq.dropna()
         mcq = mcq[
@@ -94,7 +112,6 @@ class Quizit():
         (mcq['options'].map(len) > 0) &
         (mcq['options'].map(len) >= mcq['answers'].map(len))
         ]
-
         if mcq.shape[0] == 0:
             raise ValueError(
         "No valid multiple-choice questions are available. Ensure that the data has no missing values, "

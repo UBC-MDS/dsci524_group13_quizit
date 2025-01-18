@@ -7,7 +7,7 @@ import time
 import os
 
 def select_questions(mcq, n):
-    # Shuffle and Select Questions
+    """Randomly selects a specified number of questions from the question bank."""
     try:
         quiz = mcq.sample(n, replace=False, ignore_index=True)
     except ValueError:
@@ -16,10 +16,11 @@ def select_questions(mcq, n):
     return quiz.shape[0], quiz
 
 def prompt_input():
-    # Prompt users for input
+    """Prompts the user to input their answer."""
     return input("Enter Answer: ")
 
 def print_question(question, iter, print_q=True):   
+    """Print question and its options to the user or return a string containing the question and its options."""
     # Print MCQ questions the their options
     options_dict = {}
     options = question["options"]
@@ -39,6 +40,7 @@ def print_question(question, iter, print_q=True):
 
 
 def input_check(user_input, n_options, count):
+    """Validates the user's input and ensures it matches the available options."""
     clean_user_input = user_input.replace(" ", "").upper().strip(",").split(",")
     if all(ans in n_options for ans in clean_user_input):
         message =  f"Your Answer: {clean_user_input}"
@@ -55,6 +57,7 @@ def input_check(user_input, n_options, count):
             return ("", True, message)
 
 def mcq_score(options_dict, question_df, user_input):
+    """Calculates the score for a question based on the user's input."""
     if user_input == [""]:
         return 0.0
     answers = question_df["answers"]
@@ -66,6 +69,7 @@ def mcq_score(options_dict, question_df, user_input):
     return round(score, 2)
 
 def score_log(final_score, time_used, save_score=True, file_path=""):
+    """Saves the quiz score and time taken to finish the quiz to a text file."""
     if save_score == False:
         return
 
@@ -84,6 +88,7 @@ def score_log(final_score, time_used, save_score=True, file_path=""):
     return 
 
 def question_log(type, quiz, file_path=""):
+    """Logs questions along with user's input based on the specified type (all, correct, or incorrect)."""
     if type == "all":
         pass
     elif type == "incorrect":
@@ -105,6 +110,7 @@ def question_log(type, quiz, file_path=""):
     return quiz
 
 class QuizResult:
+    """Represents the results of a quiz, including time taken, score, and question details."""
     def __init__(self, time_used, score, question_summary):
         self.time_used = time_used
         self.score = score
