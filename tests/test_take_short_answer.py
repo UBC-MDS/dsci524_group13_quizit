@@ -7,6 +7,9 @@ from dsci524_group13_quizit.take_short_answer import Quizit, QuizResult
 
 @pytest.fixture
 def quizit():
+    """
+    Fixture to initialize a Quizit object with a sample question.
+    """
     quiz = Quizit()
     quiz.shrtq = pd.DataFrame({
         'question': ['What is Python?'],
@@ -16,11 +19,17 @@ def quizit():
 
 
 def test_take_short_answer_not_enough_questions(quizit):
+    """
+    Test for raising ValueError when there are not enough questions.
+    """
     with pytest.raises(ValueError):
         quizit.take_short_answer(n=5)
 
 
 def test_take_short_answer_no_questions_loaded():
+    """
+    Test for raising ValueError when no questions are loaded.
+    """
     quizit = Quizit()
     quizit.shrtq = None  
     with pytest.raises(ValueError):
@@ -28,6 +37,9 @@ def test_take_short_answer_no_questions_loaded():
 
 
 def test_save_score(quizit):
+    """
+    Test saving the score to a file and verifying its content.
+    """
     file_path = 'test/path'
     score = 85.5
     time_used = 120.5
@@ -48,6 +60,9 @@ def test_save_score(quizit):
 
 
 def test_save_question_log(quizit):
+    """
+    Test logging correct and incorrect answers to separate files.
+    """
     file_path = 'test/path'
     if not os.path.exists(file_path):
         os.makedirs(file_path)
@@ -82,6 +97,9 @@ def test_save_question_log(quizit):
 
 
 def test_edge_case_empty_questions():
+    """
+    Test for raising ValueError when there are no questions available.
+    """
     quizit = Quizit()
     quizit.shrtq = pd.DataFrame()  
 
@@ -90,6 +108,9 @@ def test_edge_case_empty_questions():
 
 
 def test_take_short_answer_with_edge_case_empty_question():
+    """
+    Test for raising ValueError with an empty question set.
+    """
     quizit = Quizit()
     quizit.shrtq = pd.DataFrame()  
 
