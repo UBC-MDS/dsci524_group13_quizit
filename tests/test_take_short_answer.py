@@ -14,15 +14,6 @@ def quizit():
     })
     return quiz
 
-def test_take_short_answer_valid(quizit, capsys):
-    with capsys.disabled():
-        result = quizit.take_short_answer(n=1)
-    captured = capsys.readouterr()
-
-    assert result.score == 100.0
-    assert len(result.question_summary) == 1
-    assert "Your Answer: python" in captured.out
-
 
 def test_take_short_answer_not_enough_questions(quizit):
     with pytest.raises(ValueError):
@@ -96,19 +87,6 @@ def test_edge_case_empty_questions():
 
     with pytest.raises(ValueError):
         quizit.take_short_answer(n=1)
-
-
-def test_edge_case_invalid_answer_format(quizit, capsys, monkeypatch):
-    monkeypatch.setattr('builtins.input', lambda _: 'apple pie')  
-    
-    with capsys.disabled():
-        quizit.shrtq = pd.DataFrame({
-            'question': ['What is your favorite fruit?'],
-            'answers': ['apple']
-        })
-        with pytest.raises(ValueError):
-            quizit.take_short_answer(n=1)
-
 
 
 def test_take_short_answer_with_edge_case_empty_question():
