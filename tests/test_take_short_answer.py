@@ -3,6 +3,7 @@ import os
 import pandas as pd
 from io import StringIO
 
+from dsci524_group13_quizit.take_short_answer import Quizit,QuizResult
 
 def test_take_short_answer_valid(quizit, capsys):
     with capsys.disabled():
