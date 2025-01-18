@@ -1,7 +1,13 @@
 import pandas as pd
 import string as str
 import time
-from utils import *
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from dsci524_group13_quizit.utils import (
+    select_questions, print_question, prompt_input, input_check, 
+    mcq_score, score_log, question_log, QuizResult
+)
 class Quizit():
     """
     A class to manage and conduct custom quizzes with multiple-choice and short-answer questions.
@@ -29,7 +35,7 @@ class Quizit():
         self.shrtq = None
         pass
 
-    def take_multiple_choice(self, n, save_questions=False, save_score=False):
+    def take_multiple_choice(self, n, save_questions=False, save_score=False, file_path=""):
         """
         Conducts a multiple-choice quiz and provides optional result tracking.
 
@@ -89,6 +95,9 @@ class Quizit():
         (mcq['options'].map(len) >= mcq['answers'].map(len))
         ]
 
+        if mcq is None:
+            raise ValueError("No multiple-choice questions loaded.")
+
         # Initialise Quiz
         n, quiz = select_questions(self.mcq, max(n, 1))
         final_score = []
@@ -119,8 +128,8 @@ class Quizit():
         # Saving and Displaying Quiz Results
         time_used = round((time.time() - start_time), 2)
         pct_score = round(sum(final_score)/n, 2)
-        score_log(round(pct_score, 2), time_used, save_score)
-        quiz = question_log(save_questions, quiz)
+        score_log(round(pct_score, 2), time_used, save_score, file_path)
+        quiz = question_log(save_questions, quiz, file_path)
         result = QuizResult(time_used=time_used, score=pct_score, question_summary=quiz)
         
         print("="*30, "\nQuiz Results")
