@@ -5,16 +5,76 @@ class QuestionType(Enum):
     MULTIPLE_CHOICE = "multiple choice"
     SHORT_ANSWER = "short answer"
 
-def load_questions(questions: pd.DataFrame = None, input_file: str = None, question_type: QuestionType = None, has_header: bool = True):
+def load_questions_from_file(input_file: str, question_type: QuestionType, has_header: bool = True) -> pd.DataFrame:
     """
-    Loads user's questions from a CSV file or a pandas DataFrame.
 
-    This function reads the user's questions either from a CSV file or a pandas DataFrame.
+    This function reads the user's questions from a CSV file.
     The questions are converted into a pandas DataFrame and saved in the internal class variable.
-
-   Parameters
+    
+    Parameters
     ----------
-    questions : pd.DataFrame, optional
+    input_file : str
+        The path to the CSV file containing the questions.
+    question_type : QuestionType
+        The type of questions, either 'multiple choice' or 'short answer'. 
+    has_header : bool, optional
+        Indicates if the CSV file contains a header. Default is True.
+    
+    Returns
+    -------
+    pd.DataFrame
+        A pandas DataFrame containing the questions.
+    
+    Raises
+    ------
+    FileNotFoundError
+        If the `input_file` path does not exist.
+    ValueError
+        If the file is empty or cannot be read.
+    """
+    pass
+    
+
+
+def load_questions_from_dataframe(questions: pd.DataFrame, question_type: QuestionType, has_header: bool = True) -> pd.DataFrame:
+    """
+    
+    This function reads the user's questions from a pandas DataFrame.
+    The questions are converted into a pandas DataFrame and saved in the internal class variable.
+    
+    Parameters
+    ----------
+    questions : pd.DataFrame
+        The user questions as a pandas DataFrame.
+    question_type : QuestionType
+        The type of questions, either 'multiple choice' or 'short answer'. 
+    has_header : bool, optional
+        Indicates if the CSV file contains a header. Default is True.
+    
+    Returns
+    -------
+    pd.DataFrame
+        A pandas DataFrame containing the questions.
+    
+    Raises
+    ------
+    TypeError
+        If the `questions` is not a pandas DataFrame.
+    ValueError
+        If the DataFrame is empty.
+    """
+    pass
+    
+
+
+def load_questions(questions: pd.DataFrame = None, input_file: str = None, question_type: QuestionType = None, has_header: bool = True) -> pd.DataFrame:
+    """
+    
+    Wrapper function to load questions from a DataFrame or a file (CSV).
+    
+    Parameters
+    ----------
+     questions : pd.DataFrame, optional
         The user questions as a pandas DataFrame. Default is None.
     input_file : str, optional
         The path to the CSV file containing the questions. Default is None.
@@ -22,20 +82,17 @@ def load_questions(questions: pd.DataFrame = None, input_file: str = None, quest
         The type of questions, either 'multiple choice' or 'short answer'. Default is None.
     has_header : bool, optional
         Indicates if the CSV file or DataFrame contains a header. Default is True.
-
+    
     Returns
     -------
-    None
-
+    pd.DataFrame
+        A pandas DataFrame containing the questions.
+    
     Raises
-    -------
-    FileNotFoundError
-        If the `input_file` path does not exist.
+    ------
     ValueError
-        If the `input_file` is not a CSV file or if the question_type is not recognized.
-    TypeError
-        If the `questions` is not a pandas DataFrame.
-
+        If both `questions` and `input_file` are provided or neither is provided.
+    
     Examples
     --------
     >>> load_questions(input_file="questions.csv", question_type=QuestionType.MULTIPLE_CHOICE)
