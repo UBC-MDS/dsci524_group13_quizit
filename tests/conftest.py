@@ -3,9 +3,9 @@ import pytest
 import pandas as pd
 
 
-MCQ_FILE_PATH = "tests/multiple_choice.csv"
-SHRTQ_FILE_PATH = "tests/short_answer.csv"
-INVALID_FILE_PATH = "tests/invalid_file.txt"
+MCQ_FILE_PATH = "tests/test_data/multiple_choice.csv"
+SHRTQ_FILE_PATH = "tests/test_data/short_answer.csv"
+INVALID_FILE_PATH = "tests/test_data/invalid_file.txt"
 MCQ_COLUMNS = ["question", "options", "answers", "explanations"]
 SHRTQ_COLUMNS = ["question", "answers", "explanations"]
 
