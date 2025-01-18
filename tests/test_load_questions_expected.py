@@ -94,7 +94,7 @@ def test_load_multiple_choice_with_question_type(mc_questions, quizit_object):
     """Test loading and saving multiple-choice questions to the Quizit object."""
     
     validate_dataframe(mc_questions, MCQ_COLUMNS, "multiple-choice questions")
-    questions = load_questions(questions=mc_questions, question_type=QuestionType.MULTIPLE_CHOICE)
+    questions = load_questions(questions=mc_questions, question_type=QuestionType.MULTIPLE_CHOICE, delimeter=";")
     assert mc_questions.equals(questions), "The loaded questions DataFrame does not match the expected DataFrame."
     
     quizit_object.mcq = questions
@@ -102,6 +102,11 @@ def test_load_multiple_choice_with_question_type(mc_questions, quizit_object):
     assert quizit_object.mcq is not None, "The multiple-choice questions were not set in the Quizit object."
     assert isinstance(quizit_object.mcq, pd.DataFrame), "The multiple-choice questions in Quizit object should be a DataFrame."
     assert all(quizit_object.mcq.columns == MCQ_COLUMNS), "The Quizit object's multiple-choice DataFrame has incorrect columns."
+    print(quizit_object.mcq['options'].head())
+    assert isinstance(quizit_object.mcq['answers'], pd.Series ), f"The multiple-choice answers in Quizit object should be a pandas Series but recieved {type(quizit_object.mcq['answers'])}."
+    assert isinstance(quizit_object.mcq['options'], pd.Series), f"The multiple-choice options in Quizit object should be a pandas Series but recieved {type(quizit_object.mcq['options'])}."
+    assert isinstance(quizit_object.mcq['options'][0], list), f"The multiple-choice options in Quizit object should contain a list but recieved {type(quizit_object.mcq['options'][0])}."
+
 
 def test_load_short_answer_with_question_type(shrt_questions, quizit_object):
     """Test loading and saving short answer questions to the Quizit object."""
