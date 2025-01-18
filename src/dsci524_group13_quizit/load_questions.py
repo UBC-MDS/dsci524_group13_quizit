@@ -60,15 +60,26 @@ def _validate_question_format(question_type: QuestionType, has_header: bool, que
     if has_header and any(questions.columns != expected_columns):
         raise ValueError(f"The question must follow a specific format. Expected columns: {expected_columns}, received: {questions.columns}")
     
-    if delimeter and question_type == QuestionType.MULTIPLE_CHOICE:
-        questions['options'] = questions['options'].apply(lambda x: x.split(delimeter))
-        questions['answers'] = questions['answers'].apply(lambda x: x.split(delimeter))
-        quiz_obj.mcq = questions
-    # else:
-    #     questions['answers'] = questions['answers'].apply(lambda x: x.split(";"))
-    #     quiz_obj.shrtq = questions
     
-    return questions
+    if delimeter:
+        if question_type == QuestionType.MULTIPLE_CHOICE:
+            questions['options'] = questions['options'].apply(lambda x: x.split(delimeter))
+            questions['answers'] = questions['answers'].apply(lambda x: x.split(delimeter))
+            quiz_obj.mcq = questions.copy()
+            return quiz_obj.mcq
+        
+        else:
+            questions['answers'] = questions['answers'].apply(lambda x: x.split(delimeter))
+            quiz_obj.shrtq = questions.copy()
+            return quiz_obj.shrtq
+    else:
+        if question_type == QuestionType.MULTIPLE_CHOICE:
+            quiz_obj.mcq = questions.copy()
+            return quiz_obj.mcq
+        else:
+            quiz_obj.shrtq = questions.copy()
+            return quiz_obj.shrtq
+    
     
 def load_questions_from_file(input_file: str, question_type: QuestionType, has_header: bool = True, delimeter: str = None) -> pd.DataFrame:
     """
