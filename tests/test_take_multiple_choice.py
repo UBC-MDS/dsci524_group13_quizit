@@ -18,7 +18,7 @@ from dsci524_group13_quizit.utils import (
 def sample_mcq():
     """Sample DataFrame fixture for testing"""
     return pd.DataFrame({
-    "questions": ["Question 1?", "Question 2?" , "Question 3?", "Question 4?", "Question 5?"], 
+    "question": ["Question 1?", "Question 2?" , "Question 3?", "Question 4?", "Question 5?"], 
     "options": [["option1", "option2", "option3", "option4"], ["option1", "option2", "option3", "option4", "option5"], ["option1", "option2"], ["option1", "option2", "option3", "option4"], ["option1", "option2", "option3"]],
     "answers": [["option1"], ["option1", "option2", "option3"], ["option1"], ["option1", "option2"], ["option3", "option2"]],
     "explanations" :["explanation1", "explanation2", "explanation3", "explanation4", "explanation5"]
@@ -35,14 +35,14 @@ def test_select_questions(sample_mcq):
     assert n == 3
     assert quiz.shape == (3, 4)
     assert isinstance(quiz, pd.DataFrame)
-    assert any(quiz.duplicated(subset=["questions", "explanations"])) == False
+    assert any(quiz.duplicated(subset=["question", "explanations"])) == False
 
     # Test 2
     n, quiz = select_questions(sample_mcq, 10)
     assert n == 5
     assert quiz.shape == (5, 4)
     assert isinstance(quiz, pd.DataFrame)
-    assert any(quiz.duplicated(subset=["questions", "explanations"])) == False
+    assert any(quiz.duplicated(subset=["question", "explanations"])) == False
 
 def test_prompt_input(monkeypatch):
     """Test if prompt_input function prompts users for input and return it"""
