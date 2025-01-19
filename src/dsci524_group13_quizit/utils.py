@@ -26,7 +26,7 @@ def print_question(question, iter, print_q=True):
     options = question["options"]
     n_options = list(str.ascii_uppercase[0:len(options)])
 
-    q_str = f"{question['questions']}\n"
+    q_str = f"{question['question']}\n"
 
     for i in range(len(options)):
         q_str += f"{n_options[i]} : {options[i]}\n"
