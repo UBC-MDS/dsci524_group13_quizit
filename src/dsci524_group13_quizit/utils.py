@@ -113,6 +113,8 @@ def question_log(type, quiz, question_type:str, dir_name=None):
     os.makedirs(os.path.dirname(path), exist_ok=True)
 
     for i in right_wrong.keys():
+        if i not in type:
+            continue
         file_name = i + "_" + question_type + ".txt"
         path = os.path.join(dir_name, file_name)
         quiz = right_wrong[i]       
