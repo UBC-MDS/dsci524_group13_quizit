@@ -256,7 +256,7 @@ class Quizit():
         raise ValueError("Please provide either a questions DataFrame or an input file.")
 
 
-    def take_multiple_choice(self, n, save_questions=False, save_score=False, file_path=""):
+    def take_multiple_choice(self, n, save_questions=False, save_score=False, file_path=None):
         """
         Conducts a multiple-choice quiz and provides optional result tracking.
 
@@ -286,7 +286,7 @@ class Quizit():
         save_score : bool, optional (default=False)
             If True, save the final quiz score and the time taken to a file.
         
-        file_path : str, optional (default="")
+        file_path : str, optional (default=None)
             Allow users to specify the location where the quiz score and question log are stored.
 
         Returns:
@@ -342,7 +342,9 @@ class Quizit():
 
         # Initialise Quiz
         n, quiz = select_questions(self.mcq, max(n, 1))
+        quiz["response"] = ""
         final_score = []
+    
         
         print(f"This quiz contains {n} questions.\
             \nTo answer, type the corresponding letter of your choice (e.g. A). \
@@ -364,23 +366,25 @@ class Quizit():
             
             quiz.loc[i, "response"] = user_input
             score = mcq_score(options_dict, quiz.iloc[i], user_input)
-            final_score.append(score)
             quiz.loc[i, "score"] = score
+            final_score.append(score)
 
         # Saving and Displaying Quiz Results
         time_used = round((time.time() - start_time), 2)
-        pct_score = round(sum(final_score)/n, 2)
-        score_log(round(pct_score, 2), time_used, save_score, file_path)
-        quiz = question_log(save_questions, quiz, file_path)
-        result = QuizResult(time_used=time_used, score=pct_score, question_summary=quiz)
+        final_score = sum(final_score)
+        pct_score = round(final_score/n*100, 2)
+        score_log(pct_score, time_used, "mcq", save_score, file_path)
+        question_log(save_questions, quiz, "mcq", file_path)
+    
+        result = QuizResult(time_used=time_used, score=pct_score, question_summary=quiz, question_type="mcq")
         
         print("="*30, "\nQuiz Results")
-        print(f"Score: {sum(final_score)}/{n} ({pct_score*100}%)" )
+        print(f"Score: {round(final_score, 2)}/{n} ({pct_score}%)" )
         print("Time used:", round(time_used, 2), "seconds")     
 
         return result
 
-    def take_short_answer(self, n, save_questions=False, save_score=False, file_path=""):
+    def take_short_answer(self, n, save_questions=False, save_score=False, file_path=None):
         """
         Allows the user to take a short-answer quiz and evaluates their score.
         
@@ -457,83 +461,18 @@ class Quizit():
             if user_input == correct_answer:
                 score.append(1)
                 quiz.loc[[i], "response"] = user_input
-                correct_answers.append(question.iloc[i])
+                quiz.loc[[i], "score"] = 1
             else:
                 score.append(0)
                 quiz.loc[[i], "response"] = user_input
-                incorrect_answers.append(question.iloc[i])
+                quiz.loc[[i], "score"] = 0
 
         time_used = round((time.time() - start_time), 2)
         score_percent = round(sum(score) / n * 100, 2)
 
-        result = QuizResult_SHRTQ(time_used=time_used, score=score_percent, question_summary=quiz)
+        result = QuizResult(time_used=time_used, score=score_percent, question_summary=quiz, question_type="shrtq")
 
-        if save_score:
-            self.save_score(score_percent, time_used, file_path)
-        if save_questions:
-            self.save_question_log(quiz, correct_answers, incorrect_answers, file_path)
+        score_log(score_percent, time_used, "shrtq", save_score, file_path)
+        question_log(save_questions, quiz, "shrtq", file_path)
         return result
-
-    def save_score(self, score_percent, time_used, file_path):
-        """
-        Save the score to a file.
-        """
-        if not os.path.exists(file_path):
-            os.makedirs(file_path)
-
-        score_rec = f"{time.asctime()} | {score_percent}% | {time_used}s\n"
-        file = os.path.join(file_path, "score.txt")
-        mode = "a" if os.path.exists(file) else "x" 
-
-        with open(file, mode) as f:
-            if mode == "x":
-                f.write("Date                      | Score    | Time Used (s)\n")
-            f.write(score_rec)
-
-    def save_question_log(self, quiz, correct_answers, incorrect_answers, file_path):
-        """
-        Save the questions and answers to a log file.
-        """
-        if not os.path.exists(file_path):
-            os.makedirs(file_path)
-
-        correct_file = os.path.join(file_path, "correct_answers.txt")
-        incorrect_file = os.path.join(file_path, "incorrect_answers.txt")
-
-        with open(correct_file, "a") as f:
-            for i in correct_answers:
-                f.write(f"Question: {i}\n")
-                f.write(f"Correct Answer: {quiz.loc[quiz['question'] == i, 'answers'].iloc[0]}\n")
-                f.write(f"Your Answer: {quiz.loc[quiz['question'] == i, 'response'].iloc[0]}\n")
-                f.write("=" * 30 + "\n")
-
-        with open(incorrect_file, "a") as f:
-            for i in incorrect_answers:
-                f.write(f"Question: {i}\n")
-                f.write(f"Correct Answer: {quiz.loc[quiz['question'] == i, 'answers'].iloc[0]}\n")
-                f.write(f"Your Answer: {quiz.loc[quiz['question'] == i, 'response'].iloc[0]}\n")
-                f.write("=" * 30 + "\n")
-
-
-class QuizResult_SHRTQ:
-    def __init__(self, time_used, score, question_summary):
-        self.time_used = time_used
-        self.score = score
-        self.question_summary = question_summary
-
-    def __repr__(self):
-        result_str = f"Quiz Results: \n"
-        for idx, row in self.question_summary.iterrows():
-            question = row['question']
-            user_answer = row['response']
-            correct_answer = row['answers']
-            result_str += f"Question {idx+1}: {question}\n"
-            result_str += f"Your Answer: {user_answer}\n"
-            result_str += f"Correct Answer: {correct_answer}\n"
-            result_str += "=" * 30 + "\n"
-        
-        result_str += f"Total Score: {self.score}%\n"
-        result_str += f"Time Used: {self.time_used} seconds"
-        
-        return result_str
-        pass
+    
