@@ -89,7 +89,7 @@ def score_log(pct_score, time_used, question_type, save_score:bool, dir_name=Non
         if mode == "x":
             f.write("Date                      | Score       |Time Used (s)\n")
         f.write(f"{score_rec}\n")
-    print(f"Score Log Saved to {os.path.abspath(dir_name)}")
+    print(f"Score Log Saved to \"{dir_name}\"")
     return 
 
 def question_log(type, quiz, question_type:str, dir_name=None):
@@ -130,7 +130,7 @@ def question_log(type, quiz, question_type:str, dir_name=None):
                 f.write(f"Explanations: {quiz.iloc[j]['explanations']}\n")
                 f.write("=" * 30 + "\n")
 
-    print(f"Question Log Saved to {os.path.abspath(dir_name)}")
+    print(f"Question Log Saved to \"{dir_name}\"")
     return
 
 class QuizResult:
