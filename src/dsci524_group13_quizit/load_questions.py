@@ -13,11 +13,7 @@ QUESTION_COLUMN_MAPPING = {
     QuestionType.SHORT_ANSWER: SHRTQ_COLUMNS
 }
 
-from dsci524_group13_quizit.quizit import Quizit
-quiz_obj = Quizit()
-
-
-def _validate_question_format(question_type: QuestionType, has_header: bool, questions: pd.DataFrame, delimeter: str):
+def _validate_question_format(self, question_type: QuestionType, has_header: bool, questions: pd.DataFrame, delimeter: str):
     """
     Validates the format of the questions DataFrame based on the specified question type.
     
@@ -65,23 +61,23 @@ def _validate_question_format(question_type: QuestionType, has_header: bool, que
         if question_type == QuestionType.MULTIPLE_CHOICE:
             questions['options'] = questions['options'].apply(lambda x: x.split(delimeter))
             questions['answers'] = questions['answers'].apply(lambda x: x.split(delimeter))
-            quiz_obj.mcq = questions.copy()
-            return quiz_obj.mcq
+            self.mcq = questions.copy()
+            return self.mcq
         
         else:
             questions['answers'] = questions['answers'].apply(lambda x: x.split(delimeter))
-            quiz_obj.shrtq = questions.copy()
-            return quiz_obj.shrtq
+            self.shrtq = questions.copy()
+            return self.shrtq
     else:
         if question_type == QuestionType.MULTIPLE_CHOICE:
-            quiz_obj.mcq = questions.copy()
-            return quiz_obj.mcq
+            self.mcq = questions.copy()
+            return self.mcq
         else:
-            quiz_obj.shrtq = questions.copy()
-            return quiz_obj.shrtq
+            self.shrtq = questions.copy()
+            return self.shrtq
     
     
-def load_questions_from_file(input_file: str, question_type: QuestionType, has_header: bool = True, delimeter: str = None) -> pd.DataFrame:
+def load_questions_from_file(self, input_file: str, question_type: QuestionType, has_header: bool = True, delimeter: str = None) -> pd.DataFrame:
     """
 
     This function reads the user's questions from a CSV file.
@@ -120,7 +116,7 @@ def load_questions_from_file(input_file: str, question_type: QuestionType, has_h
         except ValueError:
             raise ValueError("The input file is empty.")
         
-        return _validate_question_format(question_type=question_type, has_header=has_header, questions=questions_df, delimeter=delimeter)
+        return _validate_question_format(self, question_type=question_type, has_header=has_header, questions=questions_df, delimeter=delimeter)
 
     except FileNotFoundError:
         raise FileNotFoundError(f"The file at {input_file} was not found.")
@@ -128,7 +124,7 @@ def load_questions_from_file(input_file: str, question_type: QuestionType, has_h
         raise ValueError(f"An error occurred while reading the file: {e}")
 
 
-def load_questions_from_dataframe(questions: pd.DataFrame, question_type: QuestionType, has_header: bool = True, delimeter: str = None) -> pd.DataFrame:
+def load_questions_from_dataframe(self, questions: pd.DataFrame, question_type: QuestionType, has_header: bool = True, delimeter: str = None) -> pd.DataFrame:
     """
     
     This function reads the user's questions from a pandas DataFrame.
@@ -163,7 +159,7 @@ def load_questions_from_dataframe(questions: pd.DataFrame, question_type: Questi
     if questions.empty:
         raise ValueError("The input DataFrame cannot be empty.")
     
-    return _validate_question_format(question_type=question_type, has_header=has_header, questions=questions, delimeter=delimeter)
+    return _validate_question_format(self, question_type=question_type, has_header=has_header, questions=questions, delimeter=delimeter)
 
 
 def load_questions(questions: pd.DataFrame = None, input_file: str = None, question_type: QuestionType = None, has_header: bool = True, delimeter: str = None) -> pd.DataFrame:
