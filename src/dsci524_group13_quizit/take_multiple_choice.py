@@ -35,7 +35,7 @@ class Quizit():
         self.shrtq = None
         pass
 
-    def take_multiple_choice(self, n, save_questions=False, save_score=False, file_path=""):
+    def take_multiple_choice(self, n, save_questions=False, save_score=False, file_path=None):
         """
         Conducts a multiple-choice quiz and provides optional result tracking.
 
@@ -65,7 +65,7 @@ class Quizit():
         save_score : bool, optional (default=False)
             If True, save the final quiz score and the time taken to a file.
         
-        file_path : str, optional (default="")
+        file_path : str, optional (default=None)
             Allow users to specify the location where the quiz score and question log are stored.
 
         Returns:
@@ -121,7 +121,9 @@ class Quizit():
 
         # Initialise Quiz
         n, quiz = select_questions(self.mcq, max(n, 1))
+        quiz["response"] = ""
         final_score = []
+    
         
         print(f"This quiz contains {n} questions.\
             \nTo answer, type the corresponding letter of your choice (e.g. A). \
@@ -143,18 +145,20 @@ class Quizit():
             
             quiz.loc[i, "response"] = user_input
             score = mcq_score(options_dict, quiz.iloc[i], user_input)
-            final_score.append(score)
             quiz.loc[i, "score"] = score
+            final_score.append(score)
 
         # Saving and Displaying Quiz Results
         time_used = round((time.time() - start_time), 2)
-        pct_score = round(sum(final_score)/n, 2)
-        score_log(round(pct_score, 2), time_used, save_score, file_path)
-        quiz = question_log(save_questions, quiz, file_path)
-        result = QuizResult(time_used=time_used, score=pct_score, question_summary=quiz)
+        final_score = sum(final_score)
+        pct_score = round(final_score/n*100, 2)
+        score_log(pct_score, time_used, "mcq", save_score, file_path)
+        question_log(save_questions, quiz, "mcq", file_path)
+    
+        result = QuizResult(time_used=time_used, score=pct_score, question_summary=quiz, question_type="mcq")
         
         print("="*30, "\nQuiz Results")
-        print(f"Score: {sum(final_score)}/{n} ({pct_score*100}%)" )
+        print(f"Score: {round(final_score, 2)}/{n} ({pct_score}%)" )
         print("Time used:", round(time_used, 2), "seconds")     
 
         return result

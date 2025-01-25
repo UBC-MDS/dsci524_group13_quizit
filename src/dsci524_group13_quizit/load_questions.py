@@ -93,7 +93,7 @@ def load_questions_from_file(input_file: str, question_type: QuestionType, has_h
         raise ValueError(f"An error occurred while reading the file: {e}")
 
 
-def load_questions_from_dataframe(questions: pd.DataFrame, question_type: QuestionType, has_header: bool = True, delimeter: str = None) -> pd.DataFrame:
+def load_questions_from_dataframe(self, questions: pd.DataFrame, question_type: QuestionType, has_header: bool = True, delimeter: str = None) -> pd.DataFrame:
     """
     
     This function reads the user's questions from a pandas DataFrame.

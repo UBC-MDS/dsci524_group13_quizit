@@ -151,22 +151,25 @@ def test_take_multiple_choice_invalid_arguments(sample_mcq):
 
 def test_score_log():
     """Tests the score_log function for correct file creation, logging, and handling of save options."""
-    path = os.path.join("tests", "score.txt")
+    
+    path = os.path.join("temp", "score_mcq.txt")
     if os.path.exists(path):
         os.remove(path)
+    if os.path.exists("temp"):
+        os.rmdir("temp")
     
-    score_log(0.7, 12, save_score=False, file_path="tests")
+    score_log(70, 12, save_score=False, question_type="mcq", dir_name="temp")
     assert not os.path.exists(path)
 
-    score_log(0.8, 10.5, save_score=True, file_path="tests")
-    score_log(0.7, 12, save_score=True, file_path="tests")
+    score_log(80, 10.5, save_score=True, question_type="mcq",dir_name="temp")
+    score_log(70.23, 12, save_score=True, question_type="mcq", dir_name="temp")
     assert os.path.exists(path)
     with open(path, "r") as f:
         content = f.read()
-    assert "Date                      | Score    |Time Used (s)" in content
+    assert "|Time Used (s)" in content
     assert "80%" in content
     assert "10.5" in content
-    assert "70%" in content
+    assert "70.23%" in content
     assert "12" in content
 
     if os.path.exists(path):
@@ -178,114 +181,112 @@ def test_question_log(sample_mcq):
     # Create Test Data
     sample_mcq["response"] = [["A"], ["B", "E"], ["B"], ["A", "B", "D"], ["B", "C"]]
     sample_mcq["score"] = [1.0, 0.6, 0.0, 0.75, 1.0]
-    files = ["all.txt", "incorrect.txt", "correct.txt"]
-
-    # Remove existing test files
-    for f in files:
-        path = os.path.join("tests", f)
-        if os.path.exists(path):
-            os.remove(path)
+    path_wrg = os.path.join("temp", "incorrect_mcq.txt")
+    path_rt = os.path.join("temp", "correct_mcq.txt")
     
-    # Test for save_question="all"
-    path = os.path.join("tests", "all.txt")
-    quiz = question_log(False, sample_mcq, file_path="tests")
-    assert quiz.shape == (5, 6)
-    assert not os.path.exists(path)
+    # Remove existing test files
 
-    quiz = question_log("all", sample_mcq.iloc[0:2], file_path="tests")
-    assert quiz.shape == (2, 6)
+    if os.path.exists(path_wrg):
+        os.remove(path_wrg)
+    if os.path.exists(path_rt):
+        os.remove(path_rt)
+    if os.path.exists("temp"):
+        os.rmdir("temp")
 
-    quiz = question_log("all", sample_mcq.iloc[[2]], file_path="tests")
-    assert os.path.exists(path)
-    with open(path, "r") as f:
+    # Test for save_question=False
+    question_log(type=False, quiz=sample_mcq, question_type="mcq", dir_name="temp")
+    assert not os.path.exists(path_wrg)
+    assert not os.path.exists(path_rt)
+
+    # Test for save_question="incorrect"
+    question_log(type="incorrect", quiz=sample_mcq.iloc[[4]], question_type="mcq", dir_name="temp")
+    assert os.path.exists(path_wrg)
+    assert os.path.getsize(path_wrg) == 0
+    os.remove(path_wrg)
+
+    question_log(type="incorrect", quiz=sample_mcq.iloc[0:2], question_type="mcq", dir_name="temp")
+    question_log(type="incorrect", quiz=sample_mcq.iloc[[3]], question_type="mcq", dir_name="temp")
+    with open(path_wrg, "r") as f:
+        content = f.read()
+    assert "Question 2?" in content
+    assert "Question 4?" in content
+    assert "Question 1?" not in content
+    assert "Your Answer:" in content    
+    assert "Correct Answer:" in content
+    assert "Explanations:" in content
+    
+  # Test for save_question="correct"
+    question_log("correct", sample_mcq.iloc[[1]],question_type="mcq", dir_name="temp")
+    assert os.path.getsize(path_rt) == 0
+
+    question_log("correct", sample_mcq.iloc[0:2],question_type="mcq", dir_name="temp")
+    question_log("correct", sample_mcq.iloc[[4]],question_type="mcq", dir_name="temp")
+    with open(path_rt, "r") as f:
         content = f.read()
     assert "Question 1?" in content
-    assert "Question 2?" in content
-    assert "Question 3?" in content
+    assert "Question 2?" not in content
+    assert "Question 5?" in content
     assert "Your Answer:" in content    
     assert "Correct Answer:" in content
     assert "Explanations:" in content
 
-    # Test for save_question="incorrect"
-    path = os.path.join("tests", "incorrect.txt")
-    quiz = question_log("incorrect", sample_mcq.iloc[[0]], file_path="tests")
-    assert os.path.exists(path)
-    assert os.path.getsize(path) == 0
-    assert quiz.shape == (0, 6)
-    
-    quiz = question_log("incorrect", sample_mcq.iloc[0:2], file_path="tests")
-    assert quiz.shape == (1, 6)
-
-    quiz = question_log("incorrect", sample_mcq.iloc[3:5], file_path="tests")
-    with open(path, "r") as f:
-        content = f.read()
-    assert "Question 1?" not in content
-    assert "Question 2?" in content
-    assert "Question 4?" in content
-    assert "Question 5?" not in content
-
-    # Test for save_question="correct"
-    path = os.path.join("tests", "correct.txt")
-    quiz = question_log("correct", sample_mcq.iloc[[1]], file_path="tests")
-    assert os.path.exists(path)
-    assert os.path.getsize(path) == 0
-    assert quiz.shape == (0, 6)
-
-    quiz = question_log("correct", sample_mcq.iloc[0:2], file_path="tests")
-    assert quiz.shape == (1, 6)
-
-    quiz = question_log("correct", sample_mcq.iloc[3:5], file_path="tests")
-    with open(path, "r") as f:
-        content = f.read()
-    assert "Question 1?" in content
-    assert "Question 2?" not in content
-    assert "Question 4?" not in content
-    assert "Question 5?" in content
+    # Test for save_question="all"
+    if os.path.exists(path_wrg):
+        os.remove(path_wrg)
+    if os.path.exists(path_rt):
+        os.remove(path_rt)
+    question_log(type="all", quiz=sample_mcq.iloc[0:3], question_type="mcq", dir_name="temp")
+    assert os.path.exists(path_wrg)
+    assert os.path.exists(path_rt)
 
     # Clean up test files
-    for f in files:
-        path = os.path.join("tests", f)
-        if os.path.exists(path):
-            os.remove(path)
+    if os.path.exists(path_wrg):
+        os.remove(path_wrg)
+    if os.path.exists(path_rt):
+        os.remove(path_rt)
+    if os.path.exists("temp"):
+        os.rmdir("temp")
 
 
 def test_quiz_result_class(sample_mcq):
     """Tests the QuizResult class for correct initialization and attribute storage."""
     sample_mcq["response"] = [["A"], ["B", "E"], ["B"], ["A", "B", "D"], ["B", "C"]]
     sample_mcq["score"] = [1.0, 0.6, 0.0, 0.75, 1.0]
-    result = QuizResult(time_used=15.3, score=0.85, question_summary=sample_mcq)
+    result = QuizResult(time_used=15.3, score=0.85, question_summary=sample_mcq, question_type="mcq")
     assert result.time_used == 15.3
     assert result.score == 0.85
     assert result.question_summary.shape == sample_mcq.shape
 
 def test_take_multiple_choice_quiz(sample_mcq, monkeypatch):
     """Tests the take_multiple_choice method for functionality, result generation, and file logging."""
-    files = ["score.txt", "all.txt", "incorrect.txt", "correct.txt"]
+    files = ["score_mcq.txt", "incorrect_mcq.txt", "correct_mcq.txt"]
 
     # Remove existing test files
     for f in files:
-        path = os.path.join("tests", f)
+        path = os.path.join("temp", f)
         if os.path.exists(path):
             os.remove(path)
+    if os.path.exists("temp"):
+        os.rmdir("temp")
 
     quiz = Quizit()
     quiz.mcq = sample_mcq
     
     mock_response = StringIO("A\nB\nF\nF\nF")
     monkeypatch.setattr('sys.stdin', mock_response)
-    result = quiz.take_multiple_choice(3, save_questions="all", save_score=True, file_path="tests")
+    result = quiz.take_multiple_choice(3, save_questions="all", save_score=True, file_path="temp")
 
     assert isinstance(result, QuizResult)
     assert result.time_used >= 0
-    assert 0 <= result.score <= 1
+    assert 0 <= result.score <= 100
     assert result.question_summary is not None
-    assert os.path.exists(os.path.join("tests", "score.txt"))
-    assert os.path.exists(os.path.join("tests", "all.txt"))
-    assert not os.path.exists(os.path.join("tests", "correct.txt"))
-    assert not os.path.exists(os.path.join("tests", "incorrect.txt"))
+    assert os.path.exists(os.path.join("temp", "score_mcq.txt"))
+    assert os.path.exists(os.path.join("temp", "correct_mcq.txt"))
+    assert os.path.exists(os.path.join("temp", "incorrect_mcq.txt"))
 
     # Clean up created test files
     for f in files:
-        path = os.path.join("tests", f)
+        path = os.path.join("temp", f)
         if os.path.exists(path):
             os.remove(path)
+    os.rmdir("temp")
