@@ -1,4 +1,6 @@
 # dsci524_group13_quizit
+[![Documentation Status](https://readthedocs.org/projects/dsci524_group13_quizit/badge/?version=latest)](https://dsci524_group13_quizit.readthedocs.io/en/latest/?badge=latest)
+[![codecov](https://codecov.io/gh/dsci524_group13_quizit/graph/badge.svg?token=788HY26XUG)](https://codecov.io/gh/dsci524_group13_quizit)
 
 A python package for creating and taking quizzes.
 
@@ -32,8 +34,23 @@ $ pip install dsci524_group13_quizit
 ## Tests
 
 ## Usage
+**Below are outlined steps on how to interact with this package as a user**
+The tutorial assumes you are using python and ...
+```{python}
+mcq_file_path = "tests/test_data/multiple_choice.csv"
+shrtq_file_path = "tests/test_data/short_answer.csv"
 
-- TODO
+from dsci524_group13_quizit import Quizit, QuestionType
+quiz = Quizit()
+mc_questions    = quiz.load_questions(input_file=mcq_file_path, question_type=QuestionType.MULTIPLE_CHOICE, delimeter=";")
+shrt_questions  = quiz.load_questions(input_file=shrtq_file_path, question_type=QuestionType.SHORT_ANSWER, delimeter=";")
+
+quiz.take_multiple_choice(1)
+
+quiz.take_short_answer(1)
+
+```
+
 
 ## Contributors
 
@@ -41,12 +58,16 @@ Mavis Wong(@MavisWong295), Shangjia Yu(@shangjiayuu), Sopuruchi Chisom(@cs-uche)
 
 ## Contributing
 
-Interested in contributing? Check out the contributing guidelines. Please note that this project is released with a Code of Conduct. By contributing to this project, you agree to abide by its terms.
+Interested in contributing? Check out the [contributing guidelines](./CONTRIBUTING.md). Please note that this project is released with a [Code of Conduct](./CONDUCT.md). By contributing to this project, you agree to abide by its terms.
 
 ## License
 
-`dsci524_group13_quizit` was created by Mavis Wong, Shengjia Yu, Sopuruchi Chisom. It is licensed under the terms of the MIT license.
+`dsci524_group13_quizit` was created by Mavis Wong, Shengjia Yu, Sopuruchi Chisom. It is licensed under the terms of the [MIT license](./LICENSE).
 
 ## Credits
 
 `dsci524_group13_quizit` was created with [`cookiecutter`](https://cookiecutter.readthedocs.io/en/latest/) and the `py-pkgs-cookiecutter` [template](https://github.com/py-pkgs/py-pkgs-cookiecutter).
+
+## Changelog
+
+All notable changes to this project will be documented in [CHANGELOG.md](./CHANGELOG.md).
