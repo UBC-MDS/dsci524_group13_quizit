@@ -143,7 +143,7 @@ class Quizit():
                 user_input, valid, message = input_check(user_input, n_options, count)
                 print(message)
             
-            quiz.loc[i, "response"] = user_input
+            quiz.at[i]["response"] = user_input
             score = mcq_score(options_dict, quiz.iloc[i], user_input)
             quiz.loc[i, "score"] = score
             final_score.append(score)
