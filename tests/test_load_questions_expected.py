@@ -1,4 +1,4 @@
-from dsci524_group13_quizit.load_questions import QuestionType, load_questions
+from dsci524_group13_quizit.question_type import QuestionType
 import os
 import pandas as pd
 
@@ -25,41 +25,41 @@ def validate_dataframe(df, expected_columns, description):
         assert col in df.columns, f"The {description} DataFrame is missing the column '{col}'."
 
 
-def test_load_questions_from_csv_multiple_choice(mc_questions, mcq_file_path, mcq_columns):
+def test_load_questions_from_csv_multiple_choice(quizit_object, mc_questions, mcq_file_path, mcq_columns):
     """Test loading multiple-choice questions from a CSV file."""
     assert os.path.isfile(mcq_file_path), f"The file {mcq_file_path} does not exist."
-    questions = load_questions(input_file=mcq_file_path, question_type=QuestionType.MULTIPLE_CHOICE)
+    questions = quizit_object.load_questions(input_file=mcq_file_path, question_type=QuestionType.MULTIPLE_CHOICE)
     validate_dataframe(mc_questions, mcq_columns, "multiple-choice questions")
     assert mc_questions.equals(questions), "The loaded questions DataFrame does not match the expected DataFrame."
 
-def test_load_questions_from_csv_short_answer(shrt_questions, shrtq_file_path, shrtq_columns):
+def test_load_questions_from_csv_short_answer(quizit_object, shrt_questions, shrtq_file_path, shrtq_columns):
     """Test loading short-answer questions from a CSV file."""
     assert os.path.isfile(shrtq_file_path), f"The file {shrtq_file_path} does not exist."
-    questions = load_questions(input_file=shrtq_file_path, question_type=QuestionType.SHORT_ANSWER)
+    questions = quizit_object.load_questions(input_file=shrtq_file_path, question_type=QuestionType.SHORT_ANSWER)
     validate_dataframe(shrt_questions, shrtq_columns, "short-answer questions")
     assert shrt_questions.equals(questions), "The loaded questions DataFrame does not match the expected DataFrame."
 
-def test_load_questions_from_dataframe_multiple_choice(mc_questions, mcq_columns):
+def test_load_questions_from_dataframe_multiple_choice(quizit_object, mc_questions, mcq_columns):
     """Test loading multiple-choice questions from a pandas DataFrame."""
     validate_dataframe(mc_questions, mcq_columns, "multiple-choice questions")
-    questions = load_questions(questions=mc_questions, question_type=QuestionType.MULTIPLE_CHOICE)
+    questions = quizit_object.load_questions(questions=mc_questions, question_type=QuestionType.MULTIPLE_CHOICE)
     assert mc_questions.equals(questions), "The loaded questions DataFrame does not match the expected DataFrame."
 
-def test_load_questions_from_dataframe_short_answer(shrt_questions, shrtq_columns):
+def test_load_questions_from_dataframe_short_answer(quizit_object, shrt_questions, shrtq_columns):
     """Test loading short-answer questions from a pandas DataFrame."""
     validate_dataframe(shrt_questions, shrtq_columns, "short-answer questions")
-    questions = load_questions(questions=shrt_questions, question_type=QuestionType.SHORT_ANSWER)
+    questions = quizit_object.load_questions(questions=shrt_questions, question_type=QuestionType.SHORT_ANSWER)
     assert shrt_questions.equals(questions), "The loaded questions DataFrame does not match the expected DataFrame."
 
-def test_load_questions_csv_without_header_multiple_choice(mcq_columns):
+def test_load_questions_csv_without_header_multiple_choice(quizit_object, mcq_columns):
     """Test loading from a CSV file without a header."""
     # Create a temporary CSV without a header
-    no_header_path = "tests/no_header.csv"
+    no_header_path = "tests/test_data/no_header.csv"
     no_header_data = "Question1,Option1,Answer1,Explanation1\nQuestion2,Option2,Answer2,Explanation2"
     with open(no_header_path, "w") as f:
         f.write(no_header_data)
     
-    questions = load_questions(input_file=no_header_path, question_type=QuestionType.MULTIPLE_CHOICE, has_header=False)
+    questions = quizit_object.load_questions(input_file=no_header_path, question_type=QuestionType.MULTIPLE_CHOICE, has_header=False)
     assert not questions.empty, "The loaded DataFrame should not be empty."
     assert len(questions.columns) == len(mcq_columns), "The DataFrame should have 4 columns when loaded without a header."
     
@@ -69,7 +69,7 @@ def test_load_multiple_choice_with_question_type(mc_questions, quizit_object, mc
     """Test loading and saving multiple-choice questions to the Quizit object."""
     
     validate_dataframe(mc_questions, mcq_columns, "multiple-choice questions")
-    questions = load_questions(questions=mc_questions, question_type=QuestionType.MULTIPLE_CHOICE, delimeter=";")
+    questions = quizit_object.load_questions(questions=mc_questions, question_type=QuestionType.MULTIPLE_CHOICE, delimeter=";")
     assert mc_questions.equals(questions), "The loaded questions DataFrame does not match the expected DataFrame."
     
     quizit_object.mcq = questions
@@ -87,7 +87,7 @@ def test_load_short_answer_with_question_type(shrt_questions, quizit_object, shr
     """Test loading and saving short answer questions to the Quizit object."""
     
     validate_dataframe(shrt_questions, shrtq_columns, "short answer questions")
-    questions = load_questions(questions=shrt_questions, question_type=QuestionType.SHORT_ANSWER)
+    questions = quizit_object.load_questions(questions=shrt_questions, question_type=QuestionType.SHORT_ANSWER)
     assert shrt_questions.equals(questions), "The loaded questions DataFrame does not match the expected DataFrame."
     
     quizit_object.shrt = questions

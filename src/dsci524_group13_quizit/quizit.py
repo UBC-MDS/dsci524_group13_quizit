@@ -10,8 +10,8 @@ from dsci524_group13_quizit.utils import (
 )
 
 from dsci524_group13_quizit.load_questions import (
-    MCQ_COLUMNS, SHRTQ_COLUMNS, QUESTION_COLUMN_MAPPING, QuestionType,
-    _validate_question_format, load_questions_from_dataframe, load_questions_from_file
+    QuestionType,
+    load_questions_from_dataframe, load_questions_from_file
 )
 
 class Quizit():
@@ -42,6 +42,45 @@ class Quizit():
         pass
 
 
+    def _process_save_questions(self, questions: pd.DataFrame, question_type: QuestionType, delimeter: str):
+        """
+        Internal Helper Function
+        Processes the questions DataFrame by splitting the 'options' and 'answers' columns based on the provided delimiter.
+
+        Parameters
+        ----------
+        questions : (pd.DataFrame)
+            DataFrame containing the questions to be processed.
+        question_type : (QuestionType)
+            Enum indicating the type of questions (e.g., MULTIPLE_CHOICE).
+        delimeter : (str)
+            The delimiter used to split the 'options' and 'answers' columns.
+
+        Returns
+        ----------
+        questions : (pd.DataFrame)
+            The processed DataFrame with 'options' and 'answers' columns split based on the delimiter.
+        """
+        if delimeter:
+            if question_type == QuestionType.MULTIPLE_CHOICE:
+                questions['options'] = questions['options'].apply(lambda x: x.split(delimeter))
+                questions['answers'] = questions['answers'].apply(lambda x: x.split(delimeter))
+                self.mcq = questions.copy()
+                return self.mcq
+            
+            else:
+                questions['answers'] = questions['answers'].apply(lambda x: x.split(delimeter))
+                self.shrtq = questions.copy()
+                return self.shrtq
+        else:
+            if question_type == QuestionType.MULTIPLE_CHOICE:
+                self.mcq = questions.copy()
+                return self.mcq
+            else:
+                self.shrtq = questions.copy()
+                return self.shrtq
+    
+    
     def load_questions(self, questions: pd.DataFrame = None, input_file: str = None, question_type: QuestionType = None, has_header: bool = True, delimeter: str = None) -> pd.DataFrame:
         """
         
@@ -94,10 +133,13 @@ class Quizit():
             raise ValueError("Please provide either a questions DataFrame or an input file, not both.")
         
         if questions is not None:
-            return load_questions_from_dataframe(self, questions=questions, question_type=question_type, has_header=has_header, delimeter=delimeter)
+            load_questions_from_dataframe(questions=questions, question_type=question_type, has_header=has_header, delimeter=delimeter)
+            return self._process_save_questions(questions, question_type, delimeter)
         
         if input_file is not None:
-            return load_questions_from_file(self, input_file=input_file, question_type=question_type, has_header=has_header, delimeter=delimeter)
+            questions = load_questions_from_file(input_file=input_file, question_type=question_type, has_header=has_header, delimeter=delimeter)
+            return self._process_save_questions(questions, question_type, delimeter)
+            
         
         raise ValueError("Please provide either a questions DataFrame or an input file.")
 

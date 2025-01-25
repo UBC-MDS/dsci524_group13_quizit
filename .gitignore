@@ -1,3 +1,8 @@
+# package specific output
+*incorrect_answers.txt
+*correct_answers.txt
+*score.txt
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
