@@ -31,8 +31,6 @@ Whether you're teaching a class or studying for an exam, `dsci524_group13_quizit
 $ pip install dsci524_group13_quizit
 ```
 
-## Tests
-
 ## Usage
 **Below are outlined steps on how to interact with this package as a user**
 The tutorial assumes you are using python and ...
@@ -46,9 +44,7 @@ mc_questions    = quiz.load_questions(input_file=mcq_file_path, question_type=Qu
 shrt_questions  = quiz.load_questions(input_file=shrtq_file_path, question_type=QuestionType.SHORT_ANSWER, delimeter=";")
 
 quiz.take_multiple_choice(1)
-
 quiz.take_short_answer(1)
-
 ```
 
 
