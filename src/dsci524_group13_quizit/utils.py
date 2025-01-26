@@ -68,52 +68,93 @@ def mcq_score(options_dict, question_df, user_input):
     score = sum(right_match + wrong_absent) / len(options_dict)
     return round(score, 2)
 
-def score_log(final_score, time_used, save_score=True, file_path=""):
+def score_log(pct_score, time_used, question_type, save_score:bool, dir_name=None):
     """Saves the quiz score and time taken to finish the quiz to a text file."""
     if save_score == False:
         return
 
-    score_rec = f"{time.asctime()}  | {round(final_score*100)}%      | {time_used}"
-    
-    file = os.path.join(file_path, "score.txt")
-    if not os.path.exists(file):
+    if dir_name is None:
+        dir_name = "results"
+
+    score_rec = f"{time.asctime()}  | {pct_score}%      | {time_used}"
+    file_name = "score" + "_" + question_type + ".txt"
+    path = os.path.join(dir_name, file_name)
+    if not os.path.exists(path):
         mode = "x"
+        os.makedirs(os.path.dirname(path), exist_ok=True)
     else: 
         mode = "a"
 
-    with open(file, mode) as f:
+    with open(path, mode) as f:
         if mode == "x":
-            f.write("Date                      | Score    |Time Used (s)\n")
+            f.write("Date                      | Score       |Time Used (s)\n")
         f.write(f"{score_rec}\n")
+    print(f"Score Log Saved to \"{dir_name}\"")
     return 
 
-def question_log(type, quiz, file_path=""):
+def question_log(type, quiz, question_type:str, dir_name=None):
     """Logs questions along with user's input based on the specified type (all, correct, or incorrect)."""
-    if type == "all":
-        pass
-    elif type == "incorrect":
-        quiz = quiz.loc[quiz["score"]!=1]
-    elif type == "correct":
-        quiz = quiz.loc[quiz["score"]==1]
-    else:
-        return quiz
 
-    file = os.path.join(file_path, type + ".txt")
-    with open(file, "a") as f:
-        for i in range(quiz.shape[0]):
-            f.write(f"Question \n")
-            f.write(print_question(quiz.iloc[i], i, print_q=False))
-            f.write(f"Your Answer: {quiz.iloc[i]['response']}\n")
-            f.write(f"Correct Answer: {quiz.iloc[i]['answers']}\n")
-            f.write(f"Explanations: {quiz.iloc[i]['explanations']}\n")
-            f.write("====================================\n")
-    return quiz
+    if type == False:
+        return quiz
+    elif type == "all": 
+        type = ["incorrect", "correct"]
+    elif type == "incorrect" or "correct":
+        type = [type]
+    
+    right_wrong = {
+        "incorrect": quiz.loc[quiz["score"]!=1], 
+        "correct": quiz.loc[quiz["score"]==1]
+    }
+
+    if dir_name is None:
+        dir_name = "results"
+    path = os.path.join(dir_name, "")
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+
+    for i in right_wrong.keys():
+        if i not in type:
+            continue
+        file_name = i + "_" + question_type + ".txt"
+        path = os.path.join(dir_name, file_name)
+        quiz = right_wrong[i]       
+        with open(path, "a") as f:
+            for j in range(quiz.shape[0]):
+                f.write(f"Question \n")
+                if question_type == "mcq":
+                    f.write(print_question(quiz.iloc[j], j, print_q=False))
+                else:
+                    f.write(f"{quiz.iloc[j]['question']}\n")
+                f.write(f"Your Answer: {quiz.iloc[j]['response']}\n")
+                f.write(f"Correct Answer: {quiz.iloc[j]['answers']}\n")
+                f.write(f"Explanations: {quiz.iloc[j]['explanations']}\n")
+                f.write("=" * 30 + "\n")
+
+    print(f"Question Log Saved to \"{dir_name}\"")
+    return
 
 class QuizResult:
-    """Represents the results of a quiz, including time taken, score, and question details."""
-    def __init__(self, time_used, score, question_summary):
+    def __init__(self, time_used, score, question_summary, question_type):
         self.time_used = time_used
         self.score = score
         self.question_summary = question_summary
+        self.question_type = question_type
         pass
+
+    def __repr__(self):
+        result_str = f"Quiz Results: \n"
+        for idx, row in self.question_summary.iterrows():
+            if self.question_type == "mcq":
+                result_str += print_question(row, idx, print_q=False)
+            elif self.question_type == "shrtq":
+                result_str += f"Question:\n"
+                result_str += f"{row['question']}\n"
+            result_str += f"Your Answer: {row['response']}\n"
+            result_str += f"Correct Answer: {row['answers']}\n"
+            result_str += f"Explanation: {row['explanations']}\n"
+            result_str += "=" * 30 + "\n"
         
+        result_str += f"Total Score: {self.score}%\n"
+        result_str += f"Time Used: {self.time_used} seconds"
+        
+        return result_str
