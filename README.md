@@ -1,5 +1,5 @@
 # dsci524_group13_quizit
-[![Documentation Status](https://readthedocs.org/projects/dsci524_group13_quizit/badge/?version=latest)](https://dsci524_group13_quizit.readthedocs.io/en/latest/?badge=latest)
+[![Documentation Status](https://readthedocs.org/projects/dsci524-group13-quizit/badge/?version=latest)](https://dsci524-group13-quizit.readthedocs.io/en/latest/?badge=latest)
 [![codecov](https://codecov.io/gh/dsci524_group13_quizit/graph/badge.svg?token=788HY26XUG)](https://codecov.io/gh/dsci524_group13_quizit)
 
 A python package for creating and taking quizzes.
@@ -30,6 +30,9 @@ Whether you're teaching a class or studying for an exam, `dsci524_group13_quizit
 ```bash
 $ pip install dsci524_group13_quizit
 ```
+
+## Documentation
+To learn more about interacting with this package visit the [online documentation](https://dsci524-group13-quizit.readthedocs.io/en/latest/).
 
 ## Usage
 **Below are outlined steps on how to interact with this package as a user**
