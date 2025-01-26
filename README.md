@@ -1,6 +1,6 @@
 # dsci524_group13_quizit
 [![Documentation Status](https://readthedocs.org/projects/dsci524-group13-quizit/badge/?version=latest)](https://dsci524-group13-quizit.readthedocs.io/en/latest/?badge=latest)
-[![codecov](https://codecov.io/gh/dsci524_group13_quizit/graph/badge.svg?token=788HY26XUG)](https://codecov.io/gh/dsci524_group13_quizit)
+[![codecov](https://codecov.io/gh/UBC-MDS/dsci524_group13_quizit/graph/badge.svg?token=788HY26XUG)](https://codecov.io/gh/UBC-MDS/dsci524_group13_quizit)
 
 A python package for creating and taking quizzes.
 
