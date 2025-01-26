@@ -71,15 +71,19 @@ If you prefer using conda, follow these steps:
    $ conda env create -n quizit python=3.11
    $ conda activate quizit
    ```
-3. Install dependencies using the poetry lock file:
+3. Install poetry using Conda
+   ```console
+   $ conda install poetry  
+   ```
+4. Install dependencies using the poetry lock file:
    ```console
    $ poetry install
    ```
-4. Run python from the terminal:
+5. Run python from the terminal:
    ```console
    $ python
    ```
-5. Verify the installation:
+6. Verify the installation:
    ```console
    $ import dsci524_group13_quizit 
    $ help(dsci524_group13_quizit)
