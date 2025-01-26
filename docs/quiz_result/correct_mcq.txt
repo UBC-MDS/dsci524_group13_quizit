@@ -1,0 +1,10 @@
+Question 
+Who wrote 'To Kill a Mockingbird'?
+A : Harper Lee
+B : Mark Twain
+C : Ernest Hemingway
+D : F. Scott Fitzgerald
+Your Answer: ['A']
+Correct Answer: ['Harper Lee']
+Explanations: Harper Lee is the author of the Pulitzer Prize-winning novel 'To Kill a Mockingbird'.
+==============================
