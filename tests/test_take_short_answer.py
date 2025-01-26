@@ -58,6 +58,11 @@ def test_save_score(quizit):
 
     assert score_rec in saved_content
 
+    if os.path.exists(file):
+        os.remove(file)
+    if os.path.exists(file_path):
+        os.rmdir(file_path)
+        os.rmdir("test")
 
 def test_save_question_log(quizit):
     """
@@ -94,6 +99,14 @@ def test_save_question_log(quizit):
         incorrect_content = f.read()
     assert "What is 2+2?" in incorrect_content
     assert "Your Answer: 5" in incorrect_content
+
+    if os.path.exists(correct_file):
+        os.remove(correct_file)
+    if os.path.exists(incorrect_file):
+        os.remove(incorrect_file)
+    if os.path.exists(file_path):
+        os.rmdir(file_path)
+        os.rmdir("test")
 
 
 def test_edge_case_empty_questions():
