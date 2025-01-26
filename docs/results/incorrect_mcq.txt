@@ -1,0 +1,10 @@
+Question 
+What are the primary colors?
+A : Red
+B : Blue
+C : Green
+D : Yellow
+Your Answer: ['A']
+Correct Answer: ['Red', 'Blue', 'Yellow']
+Explanations: The primary colors are red, blue, and yellow. These colors can be combined to create a wide range of other colors.
+==============================
