@@ -11,10 +11,10 @@
 - Create take_multiple_choice function specification and documentation @MavisWong295 in #2
 - Create take_short_answer function specification and documentation @shengjiayuu in #3
 - Create release @shengjiayuu in #4
-- adding boilerplate file for load_questions function @cs-uche in #5
-- review milestone 1 @cs-uche @MavisWong295 @shengjiayuu in #6
-- reviewing and finalizing milestone 1 @cs-uche@shengjiayuu@MavisWong295 in #5
-- adding boilerplate file for take_short_answer function @shengjiayuu in #8
+- Adding boilerplate file for load_questions function @cs-uche in #5
+- Review milestone 1 @cs-uche @MavisWong295 @shengjiayuu in #6
+- Reviewing and finalizing milestone 1 @cs-uche@shengjiayuu@MavisWong295 in #5
+- Adding boilerplate file for take_short_answer function @shengjiayuu in #8
 - Take multiple choice @MavisWong295 in #9
 
 ## v1.0.0 (19/01/2025)
