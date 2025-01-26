@@ -59,6 +59,37 @@ Ready to contribute? Here's how to set up `dsci524_group13_quizit` for local dev
 
 5. Commit your changes and open a pull request.
 
+## Using Conda
+If you prefer using conda, follow these steps:
+1. Clone the repository:
+   ```console
+   $ git clone https://github.com/UBC-MDS/dsci524_group13_quizit.git
+   $ cd dsci524_group13_quizit
+   ```
+2. Create and activate the Conda environment:
+   ```console
+   $ conda env create -n quizit python=3.11
+   $ conda activate quizit
+   ```
+3. Install poetry using Conda
+   ```console
+   $ conda install poetry  
+   ```
+4. Install dependencies using the poetry lock file:
+   ```console
+   $ poetry install
+   ```
+5. Run python from the terminal:
+   ```console
+   $ python
+   ```
+6. Verify the installation:
+   ```console
+   $ import dsci524_group13_quizit 
+   $ help(dsci524_group13_quizit)
+   ```
+6. Commit your changes and open a pull request.
+   
 ## Pull Request Guidelines
 
 Before you submit a pull request, check that it meets these guidelines:

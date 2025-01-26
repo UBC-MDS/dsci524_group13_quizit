@@ -5,7 +5,10 @@
 :maxdepth: 1
 :hidden:
 
-example.ipynb
+tutorials.ipynb
+tutorial_load_questions.ipynb
+tutorial_mcq.ipynb
+tutorial_short_answer.ipynb
 changelog.md
 contributing.md
 conduct.md
