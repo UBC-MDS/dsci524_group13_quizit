@@ -1,6 +1,6 @@
 # dsci524_group13_quizit
-[![Documentation Status](https://readthedocs.org/projects/dsci524_group13_quizit/badge/?version=latest)](https://dsci524_group13_quizit.readthedocs.io/en/latest/?badge=latest)
-[![codecov](https://codecov.io/gh/dsci524_group13_quizit/graph/badge.svg?token=788HY26XUG)](https://codecov.io/gh/dsci524_group13_quizit)
+[![Documentation Status](https://readthedocs.org/projects/dsci524-group13-quizit/badge/?version=latest)](https://dsci524-group13-quizit.readthedocs.io/en/latest/?badge=latest)
+[![codecov](https://codecov.io/gh/UBC-MDS/dsci524_group13_quizit/graph/badge.svg?token=788HY26XUG)](https://codecov.io/gh/UBC-MDS/dsci524_group13_quizit)
 
 A python package for creating and taking quizzes.
 
@@ -31,21 +31,38 @@ Whether you're teaching a class or studying for an exam, `dsci524_group13_quizit
 $ pip install dsci524_group13_quizit
 ```
 
+## Documentation
+To learn more about interacting with this package visit the [online documentation](https://dsci524-group13-quizit.readthedocs.io/en/latest/).
+
 ## Usage
-**Below are outlined steps on how to interact with this package as a user**
-The tutorial assumes you are using python and ...
-```{python}
-mcq_file_path = "tests/test_data/multiple_choice.csv"
-shrtq_file_path = "tests/test_data/short_answer.csv"
+Below are outlined steps on how to interact with this package as a user. The tutorial assumes you are using Python and have already installed the package.
+1. **Import the package and necessary modules:**
+    ```python
+    from dsci524_group13_quizit import Quizit, QuestionType
+    ```
 
-from dsci524_group13_quizit import Quizit, QuestionType
-quiz = Quizit()
-mc_questions    = quiz.load_questions(input_file=mcq_file_path, question_type=QuestionType.MULTIPLE_CHOICE, delimeter=";")
-shrt_questions  = quiz.load_questions(input_file=shrtq_file_path, question_type=QuestionType.SHORT_ANSWER, delimeter=";")
+2. **Load your question sets:** ensure the file paths exist
+    ```python
+    mcq_file_path = "tests/test_data/multiple_choice.csv"
+    shrtq_file_path = "tests/test_data/short_answer.csv"
+    
 
-quiz.take_multiple_choice(1)
-quiz.take_short_answer(1)
-```
+    quiz = Quizit()
+    mc_questions = quiz.load_questions(input_file=mcq_file_path, question_type=QuestionType.MULTIPLE_CHOICE, delimeter=";")
+    shrt_questions = quiz.load_questions(input_file=shrtq_file_path, question_type=QuestionType.SHORT_ANSWER, delimeter=";")
+    ```
+
+3. **Take a multiple-choice quiz:**
+    ```python
+    quiz.take_multiple_choice(n=1)
+    ```
+
+4. **Take a short-answer quiz:**
+    ```python
+    quiz.take_short_answer(n=1)
+    ```
+
+These steps will guide you through the basic usage of the `dsci524_group13_quizit` package. For more detailed information, refer to the [online documentation](https://dsci524-group13-quizit.readthedocs.io/en/latest/).
 
 
 ## Contributors
