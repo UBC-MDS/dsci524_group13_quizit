@@ -40,7 +40,10 @@
 - Fix for import helper functions @cs-uche in #27
 - Importing QuestionType and load_question helpers @cs-uche in #28
 - Update QuizResult class, question_log and score_log @MavisWong295 in #29
-- 
+- Docs: tutorial load questions @cs-uche in #30
+- Take short answer @shengjiayuu in #31
+- Tutorials documentation @cs-uche in #32
+- Added tutorial for take_multiple_choice @MavisWong295 in #33
 
 
 

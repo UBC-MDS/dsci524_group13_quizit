@@ -133,6 +133,10 @@ def test_mcq_score(sample_mcq):
     score = mcq_score(options_dict, question, ["D", "E"])
     assert score == 0.0
 
+    # 4. Invalid Input (user_input=[""])
+    score = mcq_score(options_dict, question, [""])
+    assert score == 0.0
+
 
 def test_take_multiple_choice_no_questions():
     """Test that the take_multiple_choice method raises an error if no questions are loaded."""
@@ -196,11 +200,20 @@ def test_score_log():
     assert "70.23%" in content
     assert "12" in content
 
+    # Test 5. dir_name=None
+    result_path = os.path.join("results", "score_mcq.txt")
+    score_log(70.23, 12, save_score=True, question_type="mcq", dir_name=None)
+    assert os.path.exists(result_path)
+
     # Remove created files and directories
     if os.path.exists(path):
         os.remove(path)
     if os.path.exists("temp"):
         os.rmdir("temp")
+    if os.path.exists(result_path):
+        os.remove(result_path)
+    if os.path.exists("results"):
+        os.rmdir("results")
 
 def test_question_log(sample_mcq):
     """
