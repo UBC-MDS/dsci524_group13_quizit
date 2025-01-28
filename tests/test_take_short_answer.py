@@ -2,7 +2,9 @@ import pytest
 import os
 import pandas as pd
 from io import StringIO
-from dsci524_group13_quizit.take_short_answer import Quizit, QuizResult
+
+from dsci524_group13_quizit.quizit import Quizit
+from dsci524_group13_quizit.utils import (score_log, question_log, QuizResult)
 
 @pytest.fixture
 def quizit():
