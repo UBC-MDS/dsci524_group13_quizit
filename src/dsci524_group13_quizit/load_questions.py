@@ -89,8 +89,6 @@ def load_questions_from_file(input_file: str, question_type: QuestionType, has_h
 
     except FileNotFoundError:
         raise FileNotFoundError(f"The file at {input_file} was not found.")
-    except Exception as e:
-        raise ValueError(f"An error occurred while reading the file: {e}")
 
 
 def load_questions_from_dataframe(questions: pd.DataFrame, question_type: QuestionType, has_header: bool = True, delimeter: str = None) -> pd.DataFrame:
