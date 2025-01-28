@@ -111,22 +111,25 @@ class Quizit():
         
         Examples
         --------
-        >>> load_questions(input_file="questions.csv", question_type=QuestionType.MULTIPLE_CHOICE)
-        >>> load_questions(questions=pd.DataFrame(data), question_type=QuestionType.SHORT_ANSWER)
+        >>> quiz = Quizit()
+        >>> quiz.load_questions(input_file="questions.csv", question_type=QuestionType.MULTIPLE_CHOICE)
+        >>> quiz.load_questions(questions=pd.DataFrame(data), question_type=QuestionType.SHORT_ANSWER)
         
         Notes
         -----
         The input file needs to be formatted as follows:
 
-        For multiple choice questions:
-        Question | Answers       | Correct Answers | Explanation
-        -------- | ------------- | --------------- | -----------
-        mcq      | [A, B, C]     | [B, C]          | explanation
+        For multiple choice questions::
 
-        For short answer questions:
-        Question                                    | Answer
-        --------------------------------------------| ------
-        What continent has the largest population?  | Asia
+            Question | Answers       | Correct Answers | Explanation
+            -------- | ------------- | --------------- | -----------
+            mcq      | [A, B, C]     | [B, C]          | explanation
+
+        For short answer questions::
+
+            Question                                    | Answer | Explanation
+            --------------------------------------------| ------ | -----------
+            What continent has the largest population?  | Asia   | explanation
         """
 
         if questions is not None and input_file is not None:
