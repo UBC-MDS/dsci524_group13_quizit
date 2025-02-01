@@ -42,7 +42,7 @@ class Quizit():
         pass
 
 
-    def _process_save_questions(self, questions: pd.DataFrame, question_type: QuestionType, delimeter: str):
+    def _process_save_questions(self, questions: pd.DataFrame, question_type: QuestionType, delimiter: str):
         """
         Internal Helper Function
         Processes the questions DataFrame by splitting the 'options' and 'answers' columns based on the provided delimiter.
@@ -53,7 +53,7 @@ class Quizit():
             DataFrame containing the questions to be processed.
         question_type : (QuestionType)
             Enum indicating the type of questions (e.g., MULTIPLE_CHOICE).
-        delimeter : (str)
+        delimiter : (str)
             The delimiter used to split the 'options' and 'answers' columns.
 
         Returns
@@ -61,15 +61,15 @@ class Quizit():
         questions : (pd.DataFrame)
             The processed DataFrame with 'options' and 'answers' columns split based on the delimiter.
         """
-        if delimeter:
+        if delimiter:
             if question_type == QuestionType.MULTIPLE_CHOICE:
-                questions['options'] = questions['options'].apply(lambda x: x.split(delimeter))
-                questions['answers'] = questions['answers'].apply(lambda x: x.split(delimeter))
+                questions['options'] = questions['options'].apply(lambda x: x.split(delimiter))
+                questions['answers'] = questions['answers'].apply(lambda x: x.split(delimiter))
                 self.mcq = questions.copy()
                 return self.mcq
             
             else:
-                questions['answers'] = questions['answers'].apply(lambda x: x.split(delimeter))
+                questions['answers'] = questions['answers'].apply(lambda x: x.split(delimiter))
                 self.shrtq = questions.copy()
                 return self.shrtq
         else:
@@ -81,10 +81,10 @@ class Quizit():
                 return self.shrtq
     
     
-    def load_questions(self, questions: pd.DataFrame = None, input_file: str = None, question_type: QuestionType = None, has_header: bool = True, delimeter: str = None) -> pd.DataFrame:
+    def load_questions(self, questions: pd.DataFrame = None, input_file: str = None, question_type: QuestionType = None, has_header: bool = True, delimiter: str = None) -> pd.DataFrame:
         """
         
-        Wrapper function to load questions from a DataFrame or a file (CSV).
+        Wrapper function to load in questions from a DataFrame or a file (CSV).
         
         Parameters
         ----------
@@ -96,8 +96,8 @@ class Quizit():
             The type of questions, either 'multiple choice' or 'short answer'. Default is None.
         has_header : bool, optional
             Indicates if the CSV file or DataFrame contains a header. Default is True.
-        delimeter : bool, optional
-            The delimeter of the `answers` and `options` for the 'multiple choice' questions. Default is None.
+        delimiter : bool, optional
+            The delimiter of the `answers` and `options` for the 'multiple choice' questions. Default is None.
         
         Returns
         -------
@@ -111,34 +111,37 @@ class Quizit():
         
         Examples
         --------
-        >>> load_questions(input_file="questions.csv", question_type=QuestionType.MULTIPLE_CHOICE)
-        >>> load_questions(questions=pd.DataFrame(data), question_type=QuestionType.SHORT_ANSWER)
+        >>> quiz = Quizit()
+        >>> quiz.load_questions(input_file="questions.csv", question_type=QuestionType.MULTIPLE_CHOICE)
+        >>> quiz.load_questions(questions=pd.DataFrame(data), question_type=QuestionType.SHORT_ANSWER)
         
         Notes
         -----
         The input file needs to be formatted as follows:
 
-        For multiple choice questions:
-        Question | Answers       | Correct Answers | Explanation
-        -------- | ------------- | --------------- | -----------
-        mcq      | [A, B, C]     | [B, C]          | explanation
+        For multiple choice questions::
 
-        For short answer questions:
-        Question                                    | Answer
-        --------------------------------------------| ------
-        What continent has the largest population?  | Asia
+            Question | Answers       | Correct Answers | Explanation
+            -------- | ------------- | --------------- | -----------
+            mcq      | [A, B, C]     | [B, C]          | explanation
+
+        For short answer questions::
+
+            Question                                    | Answer | Explanation
+            --------------------------------------------| ------ | -----------
+            What continent has the largest population?  | Asia   | explanation
         """
 
         if questions is not None and input_file is not None:
             raise ValueError("Please provide either a questions DataFrame or an input file, not both.")
         
         if questions is not None:
-            load_questions_from_dataframe(questions=questions, question_type=question_type, has_header=has_header, delimeter=delimeter)
-            return self._process_save_questions(questions, question_type, delimeter)
+            load_questions_from_dataframe(questions=questions, question_type=question_type, has_header=has_header, delimiter=delimiter)
+            return self._process_save_questions(questions, question_type, delimiter)
         
         if input_file is not None:
-            questions = load_questions_from_file(input_file=input_file, question_type=question_type, has_header=has_header, delimeter=delimeter)
-            return self._process_save_questions(questions, question_type, delimeter)
+            questions = load_questions_from_file(input_file=input_file, question_type=question_type, has_header=has_header, delimiter=delimiter)
+            return self._process_save_questions(questions, question_type, delimiter)
             
         
         raise ValueError("Please provide either a questions DataFrame or an input file.")
@@ -182,7 +185,7 @@ class Quizit():
             If True, save the final quiz score and the time taken to a file.
             
         file_path : str, optional (default=None)
-            Allow users to specify the location where the quiz score and question log are stored.
+            Allows users to specify the location where the quiz score and question log are stored.
 
         Returns
         -------

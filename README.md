@@ -17,19 +17,19 @@ Optionally, users can also have their quiz scores and incorrect and correct ques
 The package consists of three classes: 
 1. `Quizit` —— The main class for creating and taking quizzes. This class has three methods:
 
-- `load_questions` —— Allow users to load in their own multiple-choice or short answer question sets 
+- `load_questions` —— Allows users to load in their own multiple-choice or short answer question sets 
 
     ```python
-    load_questions(questions: pd.DataFrame = None, input_file: str = None, question_type: QuestionType = None, has_header: bool = True, delimeter: str = None)
+    load_questions(questions: pd.DataFrame = None, input_file: str = None, question_type: QuestionType = None, has_header: bool = True, delimiter: str = None)
     ```
 
-- `take_multiple_choice` —— Allow users to take a multiple-choice quiz with optional result tracking.
+- `take_multiple_choice` —— Allows users to take a multiple-choice quiz with optional result tracking.
 
     ```python
     take_multiple_choice(n, save_questions=False, save_score=False, file_path=False)
     ```
 
-- `take_short_answer` —— Allow users to take a short answer quiz with optional result tracking.
+- `take_short_answer` —— Allows users to take a short answer quiz with optional result tracking.
 
     ```python
     take_short_answer(n, save_questions=False, save_score=False, file_path=False)
@@ -69,8 +69,8 @@ Below are outlined steps on how to interact with this package as a user. The tut
     
 
     quiz = Quizit()
-    mc_questions = quiz.load_questions(input_file=mcq_file_path, question_type=QuestionType.MULTIPLE_CHOICE, delimeter=";")
-    shrt_questions = quiz.load_questions(input_file=shrtq_file_path, question_type=QuestionType.SHORT_ANSWER, delimeter=";")
+    mc_questions = quiz.load_questions(input_file=mcq_file_path, question_type=QuestionType.MULTIPLE_CHOICE, delimiter=";")
+    shrt_questions = quiz.load_questions(input_file=shrtq_file_path, question_type=QuestionType.SHORT_ANSWER, delimiter=";")
     ```
 
 3. **Take a multiple-choice quiz:**

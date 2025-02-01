@@ -69,7 +69,7 @@ def test_load_multiple_choice_with_question_type(mc_questions, quizit_object, mc
     """Test loading and saving multiple-choice questions to the Quizit object."""
     
     validate_dataframe(mc_questions, mcq_columns, "multiple-choice questions")
-    questions = quizit_object.load_questions(questions=mc_questions, question_type=QuestionType.MULTIPLE_CHOICE, delimeter=";")
+    questions = quizit_object.load_questions(questions=mc_questions, question_type=QuestionType.MULTIPLE_CHOICE, delimiter=";")
     assert mc_questions.equals(questions), "The loaded questions DataFrame does not match the expected DataFrame."
     
     quizit_object.mcq = questions
