@@ -153,58 +153,67 @@ class Quizit():
         the function will display the total score and the time taken.
 
         Optional logging and score saving:
-        - If `save_score` is True, the final score and time spent are saved to a txt file.
-        - If `save_questions` is set to "all", "incorrect", or "correct", 
-        corresponding questions, along with multiple choice options, user answers, 
-        correct answers, and explanations are saved to a txt file. 
+            - If `save_score` is True, the final score and time spent are saved to a txt file.
+            - If `save_questions` is set to "all", "incorrect", or "correct", corresponding questions, along with multiple choice options, user answers, correct answers, and explanations are saved to a txt file. 
         
         Notes:
         
         If `file_path` is not specified, all files will be saved to `"results"` folder 
         in your current working directory.
 
-        Parameters:
+        Parameters
         ----------
         n : int    
-        The number of questions to randomly select from the question bank. 
-        If `n` exceeds the total number of questions in the bank, all available questions are used.
-                
-        save_questions : str or bool, optional (default=False)
-        Specifies which questions to save to a log file.
+            The number of questions to randomly select from the question bank. 
+            If `n` exceeds the total number of questions in the bank, all available questions are used.
+                   
+        save_questions : str or bool, optional (default=False) 
+            Specifies which questions to save to a log file
+
             - "all": Saves correct and incorrect questions in separate files.
+
             - "incorrect": Saves only the incorrect questions.
+
             - "correct": Saves only the correct questions.
+
             - False: No questions are saved.
 
         save_score : bool, optional (default=False)
-        If True, save the final quiz score and the time taken to a file.
+            If True, save the final quiz score and the time taken to a file.
             
         file_path : str, optional (default=None)
-        Allow users to specify the location where the quiz score and question log are stored.
+            Allow users to specify the location where the quiz score and question log are stored.
 
         Returns
         -------
-        QuizResult
-        An instance of QuizResult class, which contains:
-        - `time_used`: The time (in seconds) taken to complete the quiz.
-        - `score`: The final quiz percentage score.
-        - `question_summary`: A DataFrame with details about all answered questions, including user responses, correct answers, and scores.
-        - `question_type`: A string specifying the type of questions ("mcq" or "shrtq")
+        results : QuizResult
+            An instance of QuizResult class, which contains:
+                - `time_used`: The time (in seconds) taken to complete the quiz.
+                - `score`: The final quiz percentage score.
+                - `question_summary`: A DataFrame with details about all answered questions, including user responses, correct answers, and scores.
+                - `question_type`: A string specifying the type of questions ("mcq" or "shrtq")
         
         Raises
         -------
         ValueError
-        - If no multiple-choice questions are loaded in the `Quizit` class instance (`self.mcq` == `None`).
-        - If there are no valid multiple-choice questions available.
+            - If no multiple-choice questions are loaded in the `Quizit` class instance (`self.mcq` == `None`).
+            - If there are no valid multiple-choice questions available.
         
         TypeError
-        - If the `save_questions` parameter is not one of: 'all', 'correct', 'incorrect', or False.
-        - If the `save_score` parameter is not a boolean (True or False).
-        - If the `n` parameter is not an integer.
+            - If the `save_questions` parameter is not one of: 'all', 'correct', 'incorrect', or False.
+            - If the `save_score` parameter is not a boolean (True or False).
+            - If the `n` parameter is not an integer.
 
-        Example:
+        Scoring System
         --------
-        quiz.take_multiple_choice(10, save_questions="incorrect", save_score=True, file_path=None)
+        - Each question has correct and incorrect options.
+        - Users will earn points for selecting correct answers and for not selecting incorrect ones.
+        - The score is calculated as the sum of correctly chosen answers and correctly avoided wrong answers, divided by the total number of options.
+        - If no answer is selected or user input is invalid, the score is 0.
+
+        Example
+        --------
+        >>> results = quiz.take_multiple_choice(10, save_questions="incorrect", save_score=True, file_path=None)
         """
         # Exception Handling - Invalid Argument Input
         if self.mcq is None:

@@ -134,6 +134,33 @@ def question_log(type, quiz, question_type:str, dir_name=None):
     return
 
 class QuizResult:
+    """
+    A class to represent and format the results of a quiz.
+
+    Attributes:
+        time_used (int): The total time (in seconds) taken to complete the quiz.
+        score (float): The percentage score achieved in the quiz.
+        question_summary (DataFrame): A pandas DataFrame containing question details, 
+            including 'question', 'response', 'answers', and 'explanations'.
+        question_type (str): The type of questions in the quiz, e.g., 'mcq' (multiple-choice) or 'shrtq' (short-answer).
+
+    Methods:
+        __repr__(): 
+            Provides a formatted string representation of the quiz results, 
+            iterating through each question in the summary, displaying the question, 
+            user's response, correct answer, explanation, and overall quiz stats.
+
+    Example:
+        >>> from pandas import DataFrame
+        >>> summary = DataFrame({
+        ...     'question': ["What is 2+2?", "What is the capital of France?"],
+        ...     'response': ["4", "Paris"],
+        ...     'answers': ["4", "Paris"],
+        ...     'explanations': ["Basic math.", "France's capital is Paris."]
+        ... })
+        >>> result = QuizResult(time_used=120, score=100, question_summary=summary, question_type='mcq')
+        >>> print(result)
+        """
     def __init__(self, time_used, score, question_summary, question_type):
         self.time_used = time_used
         self.score = score
