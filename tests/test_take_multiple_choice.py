@@ -133,6 +133,10 @@ def test_mcq_score(sample_mcq):
     score = mcq_score(options_dict, question, ["D", "E"])
     assert score == 0.0
 
+    # 4. Invalid Input (user_input=[""])
+    score = mcq_score(options_dict, question, [""])
+    assert score == 0.0
+
 
 def test_take_multiple_choice_no_questions():
     """Test that the take_multiple_choice method raises an error if no questions are loaded."""
@@ -196,11 +200,20 @@ def test_score_log():
     assert "70.23%" in content
     assert "12" in content
 
+    # Test 5. dir_name=None
+    result_path = os.path.join("results", "score_mcq.txt")
+    score_log(70.23, 12, save_score=True, question_type="mcq", dir_name=None)
+    assert os.path.exists(result_path)
+
     # Remove created files and directories
     if os.path.exists(path):
         os.remove(path)
     if os.path.exists("temp"):
         os.rmdir("temp")
+    if os.path.exists(result_path):
+        os.remove(result_path)
+    if os.path.exists("results"):
+        os.rmdir("results")
 
 def test_question_log(sample_mcq):
     """
@@ -274,7 +287,16 @@ def test_question_log(sample_mcq):
     assert os.path.exists(path_wrg)
     assert os.path.exists(path_rt)
 
+    # Test 5. dir_name=None
+    result_path = os.path.join("results", "correct_mcq.txt")
+    question_log(type="correct", quiz=sample_mcq.iloc[0:3], question_type="mcq", dir_name=None)
+    assert os.path.exists(result_path)
+
     # Clean up test files
+    if os.path.exists(result_path):
+        os.remove(result_path)
+    if os.path.exists("results"):
+        os.rmdir("results")
     if os.path.exists(path_wrg):
         os.remove(path_wrg)
     if os.path.exists(path_rt):
@@ -291,6 +313,8 @@ def test_quiz_result_class(sample_mcq):
     assert result.time_used == 15.3
     assert result.score == 0.85
     assert result.question_summary.shape == sample_mcq.shape
+    assert result.question_type == 'mcq'
+    assert print_question(sample_mcq.iloc[0], 0, print_q=False) in repr(result)
 
 def test_take_multiple_choice_quiz(sample_mcq, monkeypatch):
     """Tests the take_multiple_choice method for functionality, result generation, and file logging."""
