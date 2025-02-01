@@ -1,9 +1,13 @@
 import pytest
 import os
+import io
+import sys
 import pandas as pd
 from io import StringIO
 
-from dsci524_group13_quizit.take_short_answer import Quizit, QuizResult
+from dsci524_group13_quizit.quizit import Quizit
+from dsci524_group13_quizit.utils import (score_log, question_log, QuizResult)
+from unittest.mock import patch
 
 @pytest.fixture
 def quizit():
@@ -12,34 +16,64 @@ def quizit():
     """
     quiz = Quizit()
     quiz.shrtq = pd.DataFrame({
-        'question': ['What is Python?'],
-        'answers': ['python']
+        'question': ['What is Python?', 'What is 2+2?'],
+        'answers': ['python', '4']
     })
     return quiz
 
-
-def test_take_short_answer_not_enough_questions(quizit):
+def test_take_short_answer_negative_questions(quizit):
     """
-    Test for raising ValueError when there are not enough questions.
+    Test taking a quiz with a negative number of questions.
     """
     with pytest.raises(ValueError):
-        quizit.take_short_answer(n=5)
+        quizit.take_short_answer(n=-1)
 
-
-def test_take_short_answer_no_questions_loaded():
+def test_take_short_answer_empty_questions():
     """
-    Test for raising ValueError when no questions are loaded.
+    Test taking a quiz with no questions loaded.
     """
     quizit = Quizit()
-    quizit.shrtq = None  
+    quizit.shrtq = pd.DataFrame()
     with pytest.raises(ValueError):
         quizit.take_short_answer(n=1)
 
+def test_take_short_answer_n_greater_than_available(quizit):
+    """
+    Test taking a quiz with more questions than available.
+    """
+    with pytest.raises(ValueError):
+        quizit.take_short_answer(n=10)
 
+def test_quiz_result_initialization():
+    """
+    Test the initialization of the QuizResult class.
+    """
+    quiz_summary = pd.DataFrame({
+        'question': ['What is Python?'],
+        'answers': ['python'],
+        'response': ['python']
+    })
+    result = QuizResult(time_used=10.5, score=100.0, question_summary=quiz_summary, question_type="shrtq")
+    
+    assert result.time_used == 10.5
+    assert result.score == 100.0
+    assert result.question_summary.equals(quiz_summary)
+    assert result.question_type == "shrtq"
+
+
+def test_take_short_answer_no_save(quizit, monkeypatch, tmpdir):
+    """
+    Test that no files are saved when save_score and save_questions are False.
+    """
+    # Mock user input
+    monkeypatch.setattr('builtins.input', lambda _: "python")
+    file_path = tmpdir.mkdir("test_no_save")
+    result = quizit.take_short_answer(n=1, save_score=False, save_questions=False, file_path=str(file_path))
+
+    assert not file_path.join("score.txt").exists()
+    assert not file_path.join("correct_answers.txt").exists()
+    assert not file_path.join("incorrect_answers.txt").exists()
 def test_save_score(quizit):
-    """
-    Test saving the score to a file and verifying its content.
-    """
     file_path = 'test/path'
     score = 85.5
     time_used = 120.5
@@ -58,16 +92,8 @@ def test_save_score(quizit):
 
     assert score_rec in saved_content
 
-    if os.path.exists(file):
-        os.remove(file)
-    if os.path.exists(file_path):
-        os.rmdir(file_path)
-        os.rmdir("test")
 
 def test_save_question_log(quizit):
-    """
-    Test logging correct and incorrect answers to separate files.
-    """
     file_path = 'test/path'
     if not os.path.exists(file_path):
         os.makedirs(file_path)
@@ -99,34 +125,60 @@ def test_save_question_log(quizit):
         incorrect_content = f.read()
     assert "What is 2+2?" in incorrect_content
     assert "Your Answer: 5" in incorrect_content
-
-    if os.path.exists(correct_file):
-        os.remove(correct_file)
-    if os.path.exists(incorrect_file):
-        os.remove(incorrect_file)
-    if os.path.exists(file_path):
-        os.rmdir(file_path)
-        os.rmdir("test")
-
-
-def test_edge_case_empty_questions():
+def test_take_short_answer_n_greater_than_total_questions(quizit):
     """
-    Test for raising ValueError when there are no questions available.
+    Test when the number of questions `n` exceeds the total number of available questions in `shrtq`.
     """
-    quizit = Quizit()
-    quizit.shrtq = pd.DataFrame()  
-
+    quizit.shrtq = pd.DataFrame({
+        'question': ['What is Python?', 'What is 2+2?'],
+        'answers': ['python', '4']
+    })
+    
     with pytest.raises(ValueError):
-        quizit.take_short_answer(n=1)
-
-
-def test_take_short_answer_with_edge_case_empty_question():
+        quizit.take_short_answer(n=5) 
+        
+def test_take_short_answer_case_insensitive_correct(quizit):
     """
-    Test for raising ValueError with an empty question set.
+    Test that the quiz system is case-insensitive.
     """
-    quizit = Quizit()
-    quizit.shrtq = pd.DataFrame()  
+    quizit.shrtq = pd.DataFrame({
+        'question': ['What is Python?'],
+        'answers': ['python']
+    })
+    
+    with patch('builtins.input', return_value='PYTHON'):
+        result = quizit.take_short_answer(n=1)
+    
+    assert result.score == 100.0  
+    assert len(result.question_summary[result.question_summary['score'] == 1]) == 1
+    assert result.question_summary.loc[result.question_summary['score'] == 1, 'question'].iloc[0] == 'What is Python?'
+def test_take_short_answer_incorrect_answer(quizit):
+    """
+    Test when the user provides an incorrect answer.
+    """
+    quizit.shrtq = pd.DataFrame({
+        'question': ['What is Python?'],
+        'answers': ['python']
+    })
+    with patch('builtins.input', return_value='java'):
+        result = quizit.take_short_answer(n=1)
+    
+    assert result.score == 0.0 
+    incorrect_questions = result.question_summary[result.question_summary['score'] == 0]
+    assert len(incorrect_questions) == 1  
+    assert incorrect_questions.iloc[0]['question'] == 'What is Python?' 
+    
+def test_invalid_number_of_questions(quizit):
+    """
+    Test that ValueError is raised when n is less than or equal to 0 or greater than the number of questions.
+    """
+    quizit.shrtq = pd.DataFrame({
+        'question': ['What is Python?'],
+        'answers': ['python']
+    })
 
-    with pytest.raises(ValueError):
-        quizit.take_short_answer(n=1)
+    with pytest.raises(ValueError, match="The number of questions must be greater than zero."):
+        quizit.take_short_answer(n=0)
 
+    with pytest.raises(ValueError, match=f"Not enough questions available. Only {len(quizit.shrtq)} questions loaded."):
+        quizit.take_short_answer(n=2)
