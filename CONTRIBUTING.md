@@ -68,7 +68,7 @@ If you prefer using conda, follow these steps:
    ```
 2. Create and activate the Conda environment:
    ```console
-   $ conda env create -n quizit python=3.11
+   $ conda create -n quizit python=3.11
    $ conda activate quizit
    ```
 3. Install poetry using Conda
