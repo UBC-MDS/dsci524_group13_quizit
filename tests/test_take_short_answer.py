@@ -167,3 +167,18 @@ def test_take_short_answer_incorrect_answer(quizit):
     incorrect_questions = result.question_summary[result.question_summary['score'] == 0]
     assert len(incorrect_questions) == 1  
     assert incorrect_questions.iloc[0]['question'] == 'What is Python?' 
+    
+def test_invalid_number_of_questions(quizit):
+    """
+    Test that ValueError is raised when n is less than or equal to 0 or greater than the number of questions.
+    """
+    quizit.shrtq = pd.DataFrame({
+        'question': ['What is Python?'],
+        'answers': ['python']
+    })
+
+    with pytest.raises(ValueError, match="The number of questions must be greater than zero."):
+        quizit.take_short_answer(n=0)
+
+    with pytest.raises(ValueError, match=f"Not enough questions available. Only {len(quizit.shrtq)} questions loaded."):
+        quizit.take_short_answer(n=2)
