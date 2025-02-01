@@ -326,9 +326,15 @@ class Quizit():
         """
         if self.shrtq is None:
             raise ValueError("No short-answer questions loaded.")
+            
+        if n < 0:
+            raise ValueError("The number of questions must be greater than zero.")
         
         if n > len(self.shrtq):
             raise ValueError(f"Not enough questions available. Only {len(self.shrtq)} questions loaded.")
+            
+        if n == 0:
+            return {"score": 0.0, "correct_answers": [], "incorrect_answers": []}
         
         quiz = self.shrtq.sample(n)
         question = quiz["question"]
@@ -368,6 +374,7 @@ class Quizit():
         time_used = round((time.time() - start_time), 2)
         pct_score = round(sum(score) / n * 100, 2)
 
+
         # Saving and Displaying Quiz Results
         if save_score:
             score_log(pct_score, time_used, "shrtq", save_score, file_path)
@@ -381,3 +388,4 @@ class Quizit():
         print("Time used:", time_used, "seconds")     
 
         return result
+    
