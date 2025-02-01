@@ -67,7 +67,7 @@ These steps will guide you through the basic usage of the `dsci524_group13_quizi
 
 ## Contributors
 
-Mavis Wong(@MavisWong295), Shangjia Yu(@shangjiayuu), Sopuruchi Chisom(@cs-uche)
+Mavis Wong([@MavisWong295](https://github.com/MavisWong295)), Shangjia Yu([@shangjiayuu](https://github.com/shengjiayuu)), Sopuruchi Chisom([@cs-uche](https://github.com/cs-uche))
 
 ## Contributing
 
