@@ -363,7 +363,7 @@ class Quizit():
                 print("Invalid answer. The answer must be either one word or two words.")
                 user_input = input("Enter Answer: ").strip().lower()
 
-             if user_input == correct_answer:
+            if user_input == correct_answer:
                 quiz.loc[[i], "score"] = 1 
                 quiz.loc[[i], "response"] = user_input
                 correct_answers.append(question.iloc[i])
