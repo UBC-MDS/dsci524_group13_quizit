@@ -327,7 +327,7 @@ class Quizit():
         if self.shrtq is None:
             raise ValueError("No short-answer questions loaded.")
             
-        if n < 0:
+        if n <= 0:
             raise ValueError("The number of questions must be greater than zero.")
         
         if n > len(self.shrtq):
@@ -337,6 +337,7 @@ class Quizit():
             return {"score": 0.0, "correct_answers": [], "incorrect_answers": []}
         
         quiz = self.shrtq.sample(n)
+        quiz = quiz.reset_index(drop=True)  
         question = quiz["question"]
         answers = quiz["answers"]
         quiz["response"] = ""
@@ -350,7 +351,7 @@ class Quizit():
         for i in range(len(question)):
             print(f"Question {i+1}: {question.iloc[i]}")
             
-            correct_answer = answers.iloc[i].lower()
+            correct_answer = answers.iloc[i].strip().lower()
             words = correct_answer.split()
             if len(words) == 1:
                 print("Hint: Your answer must be one word.")
@@ -358,22 +359,22 @@ class Quizit():
                 print("Hint: Your answer must be two words.")
             
             user_input = input("Enter Answer: ").strip().lower()
-            
+
             while len(user_input.split()) not in [1, 2]:
                 print("Invalid answer. The answer must be either one word or two words.")
                 user_input = input("Enter Answer: ").strip().lower()
 
             if user_input == correct_answer:
-                quiz.loc[[i], "score"] = 1 
-                quiz.loc[[i], "response"] = user_input
+                quiz.loc[i, "score"] = 1  
+                quiz.loc[i, "response"] = user_input
                 correct_answers.append(question.iloc[i])
             else:
-                quiz.loc[[i], "score"] = 0  
-                quiz.loc[[i], "response"] = user_input
+                quiz.loc[i, "score"] = 0 
+                quiz.loc[i, "response"] = user_input
                 incorrect_answers.append(question.iloc[i])
 
         time_used = round((time.time() - start_time), 2)
-        pct_score = round(sum(score) / n * 100, 2)
+        pct_score = round(quiz["score"].sum() / n * 100, 2)
 
 
         # Saving and Displaying Quiz Results
