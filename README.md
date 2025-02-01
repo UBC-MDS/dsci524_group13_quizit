@@ -13,11 +13,32 @@ Quiz scores and time used will be displayed at the end of the quiz.
 Optionally, users can also have their quiz scores and incorrect and correct questions in a text file. 
 
 ### Package Functions
-The package has three functions: 
-- `load_questions(questions: pd.DataFrame = None, input_file: str = None, question_type: QuestionType = None, has_header: bool = True, delimeter: str = None)` : allow users to load in their own multiple-choice or short answer question sets 
-- `take_multiple_choice(n, save_questions=False, save_score=False, file_path=False)`:
-    - Allow users to take a multiple-choice quiz with optional result tracking.
-- `take_short_answer(n, save_questions=False, save_score=False, file_path=False)` : allow users to take a short answer quiz with optional result tracking.
+
+The package consists of three classes: 
+1. `Quizit` —— The main class for creating and taking quizzes. This class has three methods:
+
+- `load_questions` —— Allows users to load in their own multiple-choice or short answer question sets 
+
+    ```python
+    load_questions(questions: pd.DataFrame = None, input_file: str = None, question_type: QuestionType = None, has_header: bool = True, delimiter: str = None)
+    ```
+
+- `take_multiple_choice` —— Allows users to take a multiple-choice quiz with optional result tracking.
+
+    ```python
+    take_multiple_choice(n, save_questions=False, save_score=False, file_path=False)
+    ```
+
+- `take_short_answer` —— Allows users to take a short answer quiz with optional result tracking.
+
+    ```python
+    take_short_answer(n, save_questions=False, save_score=False, file_path=False)
+    ```
+2. `QuestionType` —— This class is used in `load_questions` to specify the type of quiz questions (multiple-choice or short-answer). 
+
+3. `QuizResult` —— This class stores the quiz results returned by the `take_multiple_choice` and `take_short_answer` functions. It includes the score, time used, question summary and question type of the quiz.
+
+ 
 
 ### Python Ecosystem Integration
 
@@ -48,8 +69,8 @@ Below are outlined steps on how to interact with this package as a user. The tut
     
 
     quiz = Quizit()
-    mc_questions = quiz.load_questions(input_file=mcq_file_path, question_type=QuestionType.MULTIPLE_CHOICE, delimeter=";")
-    shrt_questions = quiz.load_questions(input_file=shrtq_file_path, question_type=QuestionType.SHORT_ANSWER, delimeter=";")
+    mc_questions = quiz.load_questions(input_file=mcq_file_path, question_type=QuestionType.MULTIPLE_CHOICE, delimiter=";")
+    shrt_questions = quiz.load_questions(input_file=shrtq_file_path, question_type=QuestionType.SHORT_ANSWER, delimiter=";")
     ```
 
 3. **Take a multiple-choice quiz:**
@@ -67,7 +88,7 @@ These steps will guide you through the basic usage of the `dsci524_group13_quizi
 
 ## Contributors
 
-Mavis Wong(@MavisWong295), Shangjia Yu(@shangjiayuu), Sopuruchi Chisom(@cs-uche)
+Mavis Wong([@MavisWong295](https://github.com/MavisWong295)), Shangjia Yu([@shangjiayuu](https://github.com/shengjiayuu)), Sopuruchi Chisom([@cs-uche](https://github.com/cs-uche))
 
 ## Contributing
 
