@@ -204,6 +204,13 @@ class Quizit():
             - If the `save_score` parameter is not a boolean (True or False).
             - If the `n` parameter is not an integer.
 
+        Scoring System
+        --------
+        - Each question has correct and incorrect options.
+        - Users will earn points for selecting correct answers and for not selecting incorrect ones.
+        - The score is calculated as the sum of correctly chosen answers and correctly avoided wrong answers, divided by the total number of options.
+        - If no answer is selected or user input is invalid, the score is 0.
+
         Example
         --------
         >>> results = quiz.take_multiple_choice(10, save_questions="incorrect", save_score=True, file_path=None)
