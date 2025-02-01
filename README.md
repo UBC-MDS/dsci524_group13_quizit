@@ -20,7 +20,7 @@ The package consists of three classes:
 - `load_questions` —— Allow users to load in their own multiple-choice or short answer question sets 
 
     ```python
-    load_questions(questions: pd.DataFrame = None, input_file: str = None, question_type: QuestionType = None, has_header: bool = True, delimeter: str = None)
+    load_questions(questions: pd.DataFrame = None, input_file: str = None, question_type: QuestionType = None, has_header: bool = True, delimiter: str = None)
     ```
 
 - `take_multiple_choice` —— Allow users to take a multiple-choice quiz with optional result tracking.
@@ -69,8 +69,8 @@ Below are outlined steps on how to interact with this package as a user. The tut
     
 
     quiz = Quizit()
-    mc_questions = quiz.load_questions(input_file=mcq_file_path, question_type=QuestionType.MULTIPLE_CHOICE, delimeter=";")
-    shrt_questions = quiz.load_questions(input_file=shrtq_file_path, question_type=QuestionType.SHORT_ANSWER, delimeter=";")
+    mc_questions = quiz.load_questions(input_file=mcq_file_path, question_type=QuestionType.MULTIPLE_CHOICE, delimiter=";")
+    shrt_questions = quiz.load_questions(input_file=shrtq_file_path, question_type=QuestionType.SHORT_ANSWER, delimiter=";")
     ```
 
 3. **Take a multiple-choice quiz:**

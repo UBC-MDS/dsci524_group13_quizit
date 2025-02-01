@@ -13,8 +13,8 @@ def _validate_question_format(question_type: QuestionType, has_header: bool, que
         Indicates whether the DataFrame has a header row.
     questions : pd.DataFrame
         The DataFrame containing the questions to be validated.
-    delimeter : bool, optional
-        The delimeter of the `answers` and `options` for the 'multiple choice' questions.
+    delimiter : bool, optional
+        The delimiter of the `answers` and `options` for the 'multiple choice' questions.
     
     Returns
     -------
@@ -45,7 +45,7 @@ def _validate_question_format(question_type: QuestionType, has_header: bool, que
         raise ValueError(f"The question must follow a specific format. Expected columns: {expected_columns}, received: {questions.columns}")
     
     
-def load_questions_from_file(input_file: str, question_type: QuestionType, has_header: bool = True, delimeter: str = None) -> pd.DataFrame:
+def load_questions_from_file(input_file: str, question_type: QuestionType, has_header: bool = True, delimiter: str = None) -> pd.DataFrame:
     """
 
     This function reads the user's questions from a CSV file.
@@ -59,8 +59,8 @@ def load_questions_from_file(input_file: str, question_type: QuestionType, has_h
         The type of questions, either 'multiple choice' or 'short answer'. 
     has_header : bool, optional
         Indicates if the CSV file contains a header. Default is True.
-    delimeter : bool, optional
-        The delimeter of the `answers` and `options` for the 'multiple choice' questions. Default is None.
+    delimiter : bool, optional
+        The delimiter of the `answers` and `options` for the 'multiple choice' questions. Default is None.
     
     Returns
     -------
@@ -91,7 +91,7 @@ def load_questions_from_file(input_file: str, question_type: QuestionType, has_h
         raise FileNotFoundError(f"The file at {input_file} was not found.")
 
 
-def load_questions_from_dataframe(questions: pd.DataFrame, question_type: QuestionType, has_header: bool = True, delimeter: str = None) -> pd.DataFrame:
+def load_questions_from_dataframe(questions: pd.DataFrame, question_type: QuestionType, has_header: bool = True, delimiter: str = None) -> pd.DataFrame:
     """
     
     This function reads the user's questions from a pandas DataFrame.
@@ -105,8 +105,8 @@ def load_questions_from_dataframe(questions: pd.DataFrame, question_type: Questi
         The type of questions, either 'multiple choice' or 'short answer'. 
     has_header : bool, optional
         Indicates if the DataFrame contains a header. Default is True.
-    delimeter : bool, optional
-        The delimeter of the `answers` and `options` for the 'multiple choice' questions. Default is None.
+    delimiter : bool, optional
+        The delimiter of the `answers` and `options` for the 'multiple choice' questions. Default is None.
     
     Returns
     -------
