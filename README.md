@@ -100,7 +100,7 @@ Interested in contributing? Check out the [contributing guidelines](./CONTRIBUTI
 
 ## License
 
-`dsci524_group13_quizit` was created by Mavis Wong, Shengjia Yu, Sopuruchi Chisom. It is licensed under the terms of the [MIT license](./LICENSE).
+`dsci524_group13_quizit` was created by Mavis Wong, Shengjia Yu, Sopuruchi Chisom. It is licensed under the terms of the [GNU General Public License v3.0](./LICENSE).
 
 ## Credits
 
