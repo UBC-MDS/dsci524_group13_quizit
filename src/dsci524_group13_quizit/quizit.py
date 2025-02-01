@@ -84,7 +84,7 @@ class Quizit():
     def load_questions(self, questions: pd.DataFrame = None, input_file: str = None, question_type: QuestionType = None, has_header: bool = True, delimiter: str = None) -> pd.DataFrame:
         """
         
-        Wrapper function to load questions from a DataFrame or a file (CSV).
+        Wrapper function to load in questions from a DataFrame or a file (CSV).
         
         Parameters
         ----------
@@ -185,7 +185,7 @@ class Quizit():
             If True, save the final quiz score and the time taken to a file.
             
         file_path : str, optional (default=None)
-            Allow users to specify the location where the quiz score and question log are stored.
+            Allows users to specify the location where the quiz score and question log are stored.
 
         Returns
         -------
