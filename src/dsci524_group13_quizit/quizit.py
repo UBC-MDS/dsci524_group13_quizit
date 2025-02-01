@@ -340,6 +340,7 @@ class Quizit():
         question = quiz["question"]
         answers = quiz["answers"]
         quiz["response"] = ""
+        quiz["score"] = None
 
         score = []
         correct_answers = []
@@ -362,12 +363,12 @@ class Quizit():
                 print("Invalid answer. The answer must be either one word or two words.")
                 user_input = input("Enter Answer: ").strip().lower()
 
-            if user_input == correct_answer:
-                score.append(1)
+             if user_input == correct_answer:
+                quiz.loc[[i], "score"] = 1 
                 quiz.loc[[i], "response"] = user_input
                 correct_answers.append(question.iloc[i])
             else:
-                score.append(0)
+                quiz.loc[[i], "score"] = 0  
                 quiz.loc[[i], "response"] = user_input
                 incorrect_answers.append(question.iloc[i])
 
