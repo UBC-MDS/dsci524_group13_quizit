@@ -1,10 +1,10 @@
 # dsci524_group13_quizit
-[![Documentation Status](https://readthedocs.org/projects/dsci524-group13-quizit/badge/?version=latest)](https://dsci524-group13-quizit.readthedocs.io/en/latest/?badge=latest)
-[![codecov](https://codecov.io/gh/UBC-MDS/dsci524_group13_quizit/graph/badge.svg?token=788HY26XUG)](https://codecov.io/gh/UBC-MDS/dsci524_group13_quizit)
-[![repostatus](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/release/python-360/)
-![ci-cd](https://github.com/UBC-MDS/passwordler/actions/workflows/ci-cd.yml/badge.svg)
-[![PyPI Version](https://img.shields.io/pypi/v/dsci524_group13_quizit.svg)](https://pypi.python.org/pypi/dsci524_group13_quizit)
+
+
+Usage    | Development   | Release
+-------- | ------------- | ---------------
+[![Documentation Status](https://readthedocs.org/projects/dsci524-group13-quizit/badge/?version=latest)](https://dsci524-group13-quizit.readthedocs.io/en/latest/?badge=latest)  | [![codecov](https://codecov.io/gh/UBC-MDS/dsci524_group13_quizit/graph/badge.svg?token=788HY26XUG)](https://codecov.io/gh/UBC-MDS/dsci524_group13_quizit) |  [![repostatus](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![Python 3.11](https://img.shields.io/badge/python-3.11-blue.svg)](https://www.python.org/downloads/release/python-360/) | [![ci-cd](https://github.com/UBC-MDS/dsci524_group13_quizit/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/UBC-MDS/dsci524_group13_quizit/actions/workflows/ci-cd.yml) |  [![PyPI Version](https://img.shields.io/pypi/v/dsci524_group13_quizit.svg)](https://pypi.python.org/pypi/dsci524_group13_quizit)
 
 A python package for creating and taking quizzes.
 
