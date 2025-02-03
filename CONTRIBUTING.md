@@ -68,7 +68,7 @@ If you prefer using conda, follow these steps:
    ```
 2. Create and activate the Conda environment:
    ```console
-   $ conda env create -n quizit python=3.11
+   $ conda create -n quizit python=3.11
    $ conda activate quizit
    ```
 3. Install poetry using Conda
@@ -84,11 +84,11 @@ If you prefer using conda, follow these steps:
    $ python
    ```
 6. Verify the installation:
-   ```console
-   $ import dsci524_group13_quizit 
-   $ help(dsci524_group13_quizit)
+   ```python
+   import dsci524_group13_quizit 
+   help(dsci524_group13_quizit)
    ```
-6. Commit your changes and open a pull request.
+7. Commit your changes and open a pull request.
    
 ## Pull Request Guidelines
 
