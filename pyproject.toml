@@ -3,7 +3,7 @@ name = "dsci524_group13_quizit"
 version = "0.0.1"
 description = "A python package for creating and taking quizzes."
 authors = ["Mavis Wong, Shengjia Yu, Sopuruchi Chisom"]
-license = "MIT"
+license = "GPL-3.0-or-later"
 readme = "README.md"
 
 [tool.poetry.dependencies]
