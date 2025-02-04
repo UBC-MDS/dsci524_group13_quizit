@@ -1,6 +1,17 @@
 # CHANGELOG
 
 
+## v1.1.2 (2025-02-04)
+
+
+## v1.1.1 (2025-02-03)
+
+### Bug Fixes
+
+- Updating the cd workflow
+  ([`33408c0`](https://github.com/UBC-MDS/dsci524_group13_quizit/commit/33408c08424424b65d29f717b0105b11ff341911))
+
+
 ## v0.0.1 (2025-02-03)
 
 ### Bug Fixes
